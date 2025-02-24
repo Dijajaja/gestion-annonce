@@ -3,4 +3,5 @@ __pycache__/
 *.pyo
 .env
 env/
+media/images_annonces/
 # node_modules/
