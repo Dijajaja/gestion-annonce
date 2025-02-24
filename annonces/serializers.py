@@ -9,7 +9,7 @@ class CategorieSerializer(serializers.ModelSerializer):
 class AnnonceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Annonce
-        fields = ['titre','description','prix','image',' categorie','proprietaire','date_publication']
+        fields = ['titre','description','prix','image','categorie','proprietaire','date_publication','status']
 
  # permettre de mettre à jour la catégorie via l'API, tu peux ajouter cette méthode
     def update(self, instance, validated_data):

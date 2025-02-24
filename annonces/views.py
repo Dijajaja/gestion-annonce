@@ -25,6 +25,7 @@ def liste_annonces(request):
 
 @api_view(['GET','PUT','DELETE'])
 def detail_annonce(request, pk):
+    
     try:
         annonce = Annonce.objects.get(pk=pk)
     except Annonce.DoesNotExist:
