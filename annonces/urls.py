@@ -6,7 +6,6 @@ urlpatterns = [
     
     # path('', liste_annonces, name='liste_annonces'),
     # path('liste-annonce/<int:pk>', detail_annonce,name='detail_annonce')
-    path('', liste_annonces, name='home'),
     path('', liste_annonces, name='liste_annonces'),
     path('annonces/<int:annonce_id>/', detail_annonce, name='detail_annonce'),
     path('creer/', views.creer_annonce, name='creer_annonce'),
