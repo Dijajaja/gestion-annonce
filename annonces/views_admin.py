@@ -1,14 +1,17 @@
 # annonces/views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import Annonce, Categorie
 from .forms import AnnonceAdminForm, CategorieForm
 from authentification.models import Utilisateur
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import Group
 
+def est_dans_groupe(user, groupes):
+    return user.groups.filter(name__in=groupes).exists()
 
 @login_required
+@user_passes_test(lambda u: est_dans_groupe(u, ['admin']), login_url='/connexion/')
 def admin_dashboard(request):
     if request.user.role != 'admin':
         messages.error(request, "Vous n'avez pas les permissions nécessaires.")
@@ -18,28 +21,25 @@ def admin_dashboard(request):
     categories = Categorie.objects.all()
     return render(request, 'dashboard/admin_dashboard.html', {'annonces': annonces, 'categories': categories})
 
-@csrf_exempt
+@login_required
+@user_passes_test(lambda u: est_dans_groupe(u, ['admin']), login_url='/connexion/')
 def valider_annonce(request, annonce_id):
     if request.user.role != 'admin':
-        return JsonResponse({'success': False, 'error': "Vous n'avez pas les permissions nécessaires."}, status=403)
-    
+        messages.error(request, "Vous n'avez pas les permissions nécessaires.")
+        
     annonce = get_object_or_404(Annonce, id=annonce_id)
     if request.method == 'POST':
-        action = request.POST.get('action')  # 'valider' ou 'rejeter'
+        action = request.POST.get('action') 
         if action == 'valider':
             annonce.status = 'valide'
         elif action == 'rejeter':
             annonce.status = 'rejet'
-        else:
-            return JsonResponse({'success': False, 'error': "Action non reconnue."}, status=400)
-        
         annonce.save()
-        return JsonResponse({'success': True, 'status': annonce.status, 'message': f"L'annonce a été {action}ée avec succès."})
-    return JsonResponse({'success': False, 'error': "Méthode non autorisée."}, status=405)
+    return redirect('admin_dashboard')
 
-# Les autres vues restent inchangées (modifier, supprimer, créer annonces et catégories)
 
 @login_required
+@user_passes_test(lambda u: est_dans_groupe(u, ['admin']), login_url='/connexion/')
 def modifier_annonce_admin(request, annonce_id):
     if request.user.role != 'admin':
         messages.error(request, "Vous n'avez pas les permissions nécessaires.")
@@ -57,6 +57,7 @@ def modifier_annonce_admin(request, annonce_id):
     return render(request, 'dashboard/modifier_annonce_admin.html', {'form': form, 'annonce': annonce})
 
 @login_required
+@user_passes_test(lambda u: est_dans_groupe(u, ['admin']), login_url='/connexion/')
 def supprimer_annonce_admin(request, annonce_id):
     if request.user.role != 'admin':
         messages.error(request, "Vous n'avez pas les permissions nécessaires.")
@@ -70,7 +71,9 @@ def supprimer_annonce_admin(request, annonce_id):
     return render(request, 'dashboard/supprimer_annonce_admin.html', {'annonce': annonce})
 
 @login_required
+@user_passes_test(lambda u: est_dans_groupe(u, ['admin']), login_url='/connexion/')
 def creer_annonce_admin(request):
+    print("tttttttttttttttttttttttttttttttttttt")
     if request.user.role != 'admin':
         messages.error(request, "Vous n'avez pas les permissions nécessaires.")
         return redirect('admin_dashboard')
@@ -86,6 +89,7 @@ def creer_annonce_admin(request):
     return render(request, 'dashboard/creer_annonce_admin.html', {'form': form})
 
 @login_required
+@user_passes_test(lambda u: est_dans_groupe(u, ['admin']), login_url='/connexion/')
 def liste_categories(request):
     if request.user.role != 'admin':
         messages.error(request, "Vous n'avez pas les permissions nécessaires.")
@@ -95,6 +99,7 @@ def liste_categories(request):
     return render(request, 'dashboard/liste_categories.html', {'categories': categories})
 
 @login_required
+@user_passes_test(lambda u: est_dans_groupe(u, ['admin']), login_url='/connexion/')
 def creer_categorie(request):
     if request.user.role != 'admin':
         messages.error(request, "Vous n'avez pas les permissions nécessaires.")
@@ -111,6 +116,7 @@ def creer_categorie(request):
     return render(request, 'dashboard/creer_categorie.html', {'form': form})
 
 @login_required
+@user_passes_test(lambda u: est_dans_groupe(u, ['admin']), login_url='/connexion/')
 def modifier_categorie(request, categorie_id):
     if request.user.role != 'admin':
         messages.error(request, "Vous n'avez pas les permissions nécessaires.")
@@ -128,6 +134,7 @@ def modifier_categorie(request, categorie_id):
     return render(request, 'dashboard/modifier_categorie.html', {'form': form, 'categorie': categorie})
 
 @login_required
+@user_passes_test(lambda u: est_dans_groupe(u, ['admin']), login_url='/connexion/')
 def supprimer_categorie(request, categorie_id):
     if request.user.role != 'admin':
         messages.error(request, "Vous n'avez pas les permissions nécessaires.")

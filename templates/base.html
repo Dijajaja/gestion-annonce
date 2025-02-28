@@ -5,14 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Plateforme des aAnnonces{% endblock %}</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
 
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
-    <!-- Ajouter le CSS de DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
-    <style>
+     <style>
         /* Ajout de styles pour le footer collé en bas */
         html, body {
             height: 100%;
@@ -54,6 +52,19 @@
         .image-container {
             overflow: hidden;
         }
+        .custom-password {
+            background-color: white !important;
+            border: 2px solid #007bff !important;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+             
     </style>
 </head>
 <body>
@@ -63,36 +74,36 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{% url 'liste_annonces' %}">
-                <i class="fas fa-brain"></i> Annonces
+                <i class="fas fa-bullhorn"></i>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-                    data-bs-target="#navbarNav" aria-controls="navbarNav" 
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            {% if user.is_authenticated and user.role == 'admin' %}
+                <div class="navbar-nav">
+                    <a class="nav-link btn text-primary ms-2 text-white {% if request.resolver_match.url_name == 'liste_annonces' %}active{% endif %}" 
+                    href="{% url 'liste_annonces' %}">Annonces</a>
+                    <a class="nav-link btn text-primary ms-2 text-white {% if request.resolver_match.url_name == 'liste_categories' %}active{% endif %}" 
+                    href="{% url 'liste_categories' %}">Catégories</a>
+                </div>
+            {% endif %}
+            
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
-                        {% comment %} {% if user.role == 'admin' %}
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-outline-light text-primary ms-2 text-white" href="{% url 'admin_dashboard' %}">Tableau de bord Admin</a>
-                            </li>
-                        {% endif %} {% endcomment %}
+                        
                         {% comment %} <li class="nav-item">
                             <a class="nav-link btn btn-outline-light text-primary ms-2 text-white" href="{% url 'creer_annonce' %}">Créer une annonce</a>
                         </li> {% endcomment %}
+                        {% comment %} <li class="nav-item">
+                            <span class="nav-link text-white">Bonjour, {{ user.username }} !</span>
+                        </li> {% endcomment %}
                         <li class="nav-item">
-                            <span class="nav-link text-white">👋 Bonjour, {{ user.username }} !</span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-outline-light text-primary ms-2 text-white" href="{% url 'deconnexion' %}">Déconnexion</a>
+                            <a class="nav-link  text-primary ms-2 text-white" href="{% url 'deconnexion' %}">Déconnexion</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link btn btn-light text-primary me-2 text-white" href="{% url 'connexion' %}">Connexion</a>
+                            <a class="nav-link text-primary me-2 text-white" href="{% url 'connexion' %}">Connexion</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn  btn-light text-primary me-8 text-white" href="{% url 'inscription' %}">Inscription</a>
+                            <a class="nav-link  text-primary me-8 text-white" href="{% url 'inscription' %}">Inscription</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -109,18 +120,10 @@
     <footer class="footer mt-5">
         <div class="container">
             <p class="mb-0">© 2025 Annonces App | Tous droits réservés.</p>
-            <small>
-                <a href="#" class="text-white me-3">Mentions légales</a> |
-                <a href="#" class="text-white ms-3">Politique de confidentialité</a>
-            </small>
         </div>
     </footer>
 
     {% bootstrap_javascript %}
-    <!-- Ajouter jQuery et DataTables JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
 </body>
 </html>

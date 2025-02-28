@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">Tableau de bord Administrateur</h2>
+    
     
     {% if messages %}
         {% for message in messages %}
@@ -15,14 +15,13 @@
         {% endfor %}
     {% endif %}
     
-    <!-- Navigation rapide -->
-    <div class="d-flex justify-content-between mb-3">
-        <a href="{% url 'creer_annonce_admin' %}" class="btn btn-primary">Créer une annonce</a>
-        <a href="{% url 'liste_categories' %}" class="btn btn-secondary">Gérer les catégories</a>
-    </div>
+    
     
     <!-- Liste des annonces -->
-    <h3 class="mb-3">Liste des annonces</h3>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Liste des annonces</h3>
+        <a href="{% url 'creer_annonce_admin' %}" class="btn btn-primary">Créer une annonce</a>
+    </div>
     {% if annonces %}
         <table class="table table-striped table-hover" id="annoncesTable">
             <thead class="table-dark">
@@ -66,9 +65,14 @@
                                             <div class="modal-body">
                                                 Êtes-vous sûr de vouloir valider l'annonce "{{ annonce.titre }}" ?
                                             </div>
+                                            
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                                <button type="button" class="btn btn-success validate-btn" data-annonce-id="{{ annonce.id }}" data-action="valider">Valider</button>
+                                                <form method="post" action="{% url 'valider_annonce' annonce.id %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="valider">
+                                                    <button type="submit" class="btn btn-success validate-btnr">Valider</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +91,11 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                                <button type="button" class="btn btn-danger reject-btn" data-annonce-id="{{ annonce.id }}" data-action="rejeter">Rejeter</button>
+                                                <form method="post" action="{% url 'valider_annonce' annonce.id %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="rejeter">
+                                                    <button type="submit" class="btn btn-danger">Rejeter</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -127,99 +135,6 @@
     {% endif %}
 </div>
 
-<script>
-    $(document).ready(function() {
-        
 
-        // ✅ Gestion du bouton Valider
-        $(document).on('click', '.validate-btn', function() {
-            const annonceId = $(this).data('annonce-id');
-            handleAnnonceUpdate(annonceId, 'valider');
-        });
-
-        // ✅ Gestion du bouton Rejeter
-        $(document).on('click', '.reject-btn', function() {
-            const annonceId = $(this).data('annonce-id');
-            handleAnnonceUpdate(annonceId, 'rejeter');
-        });
-
-        // ✅ Fonction de mise à jour AJAX
-        function handleAnnonceUpdate(annonceId, action) {
-            const modalId = (action === 'valider') ? `#validateModal${annonceId}` : `#rejectModal${annonceId}`;
-            const csrfToken = getCSRFToken();
-
-            if (!csrfToken) {
-                alert("Erreur : Impossible de récupérer le token CSRF.");
-                return;
-            }
-
-            $.ajax({
-                url: `/admins/valider/${annonceId}/`,
-                method: 'POST',
-                data: JSON.stringify({ action: action }),
-                contentType: 'application/json',
-                headers: { 'X-CSRFToken': csrfToken },
-                beforeSend: function() {
-                    $(modalId + ' .modal-footer').append('<span class="spinner-border spinner-border-sm text-primary"></span>');
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // ✅ Mise à jour du statut dans le tableau
-                        $(`tr[data-id="${annonceId}"] td:nth-child(4)`).text(response.status);
-                        $(modalId).modal('hide');
-
-                        // ✅ Affichage d'un message de succès
-                        showSuccessMessage(response.message);
-                        
-                        // ✅ Mise à jour des boutons dynamiquement
-                        updateActionButtons(annonceId, response.status);
-                    } else {
-                        alert('Erreur : ' + response.error);
-                    }
-                },
-                error: function(xhr) {
-                    alert('Erreur serveur : ' + xhr.statusText);
-                },
-                complete: function() {
-                    $(modalId + ' .spinner-border').remove();
-                }
-            });
-        }
-
-        // ✅ Affichage d'un message de succès après mise à jour
-        function showSuccessMessage(message) {
-            const alert = $(`<div class="alert alert-success mt-3">${message}</div>`);
-            $('.container').append(alert);
-            setTimeout(() => alert.fadeOut(500, function() { $(this).remove(); }), 3000);
-        }
-
-        // ✅ Mise à jour des boutons après confirmation
-        function updateActionButtons(annonceId, status) {
-            const row = $(`tr[data-id="${annonceId}"] td:last-child`);
-            row.find('.btn-success, .btn-danger').remove();
-
-            if (status === 'valide') {
-                row.append(`<button type="button" class="btn btn-danger btn-sm reject-btn" data-bs-toggle="modal" data-bs-target="#rejectModal${annonceId}" data-annonce-id="${annonceId}">Rejeter</button>`);
-            } else if (status === 'rejet') {
-                row.append(`<button type="button" class="btn btn-success btn-sm validate-btn" data-bs-toggle="modal" data-bs-target="#validateModal${annonceId}" data-annonce-id="${annonceId}">Valider</button>`);
-            }
-            $('[data-bs-toggle="tooltip"]').tooltip('dispose').tooltip();
-        }
-
-        // ✅ Fonction pour récupérer le token CSRF
-        function getCSRFToken() {
-            let cookieValue = null;
-            if (document.cookie) {
-                document.cookie.split(';').forEach(cookie => {
-                    const [name, value] = cookie.trim().split('=');
-                    if (name === 'csrftoken') {
-                        cookieValue = decodeURIComponent(value);
-                    }
-                });
-            }
-            return cookieValue;
-        }
-    });
-</script>
 
 {% endblock %}

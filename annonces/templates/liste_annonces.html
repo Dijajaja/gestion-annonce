@@ -91,29 +91,5 @@
         {% endif %}
     </div>
 
-    <!-- JavaScript pour initialiser DataTables, tooltips, et rafraîchir -->
-    <script>
-        $(document).ready(function() {
-            // Initialiser DataTables
-            $('#annoncesTable').DataTable({
-                "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.13.5/i18n/fr-FR.json"
-                },
-                "pageLength": 10,
-                "order": [[4, "desc"]],
-                "responsive": true,
-                "dom": '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
-            });
 
-            // Initialiser les tooltips Bootstrap
-            $('[data-bs-toggle="tooltip"]').tooltip({
-                trigger: 'hover'
-            });
-
-            // Gestion du bouton Rafraîchir
-            $('#refreshButton').on('click', function() {
-                window.location.reload();
-            });
-        });
-    </script>
 {% endblock %}

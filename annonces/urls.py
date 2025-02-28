@@ -1,11 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import liste_annonces, detail_annonce
+from .views import *
 from . import views, views_admin
 urlpatterns = [
     # path('', liste_annonces, name='liste_annonces'),
     # path('liste-annonce/<int:pk>', detail_annonce,name='detail_annonce')
     path('', liste_annonces, name='liste_annonces'),
+    path('annonces', liste_annonces_user, name='liste_annonces_user'),
     path('annonces/<int:annonce_id>/', detail_annonce, name='detail_annonce'),
     path('creer/', views.creer_annonce, name='creer_annonce'),
     path('modifier/<int:annonce_id>/', views.modifier_annonce, name='modifier_annonce'),
