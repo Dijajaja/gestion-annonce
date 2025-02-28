@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import *
 from . import views, views_admin
 urlpatterns = [
+    
     # path('', liste_annonces, name='liste_annonces'),
     # path('liste-annonce/<int:pk>', detail_annonce,name='detail_annonce')
     path('', liste_annonces, name='liste_annonces'),
