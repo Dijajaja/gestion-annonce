@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes annonces{% endblock %}
+
+{% block content %}
+    <div class="container my-4">
+        <h1 class="mb-4">Mes annonces</h1>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <a href="{% url 'creer_annonce' %}" class="btn btn-primary">Créer une annonce</a>
+        
+        <div class="mb-3 d-flex align-items-center gap-2">
+            <form method="get" class="d-flex align-items-center flex-grow-1">
+                <label for="statusFilter" class="form-label me-2">Filtrer par statut :</label>
+                <select name="status" id="statusFilter" class="form-select me-2" onchange="this.form.submit()">
+                    <option value="">Tous</option>
+                    <option value="en_attente" {% if status == 'en_attente' %}selected{% endif %}>En attente</option>
+                    <option value="valide" {% if status == 'valide' %}selected{% endif %}>Validé</option>
+                    <option value="rejet" {% if status == 'rejet' %}selected{% endif %}>Rejeté</option>
+                </select>
+            </form>
+            
+        </div>
+        {% if annonces %}
+        
+            <table id="annoncesTable" class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Titre</th>
+                        <th>Prix</th>
+                        <th>Catégorie</th>
+                        <th>Statut</th>
+                        <th>Date de publication</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for annonce in annonces %}
+                        <tr>
+                            <td>{{ annonce.titre }}</td>
+                            <td>{{ annonce.prix|default:"Non spécifié" }} €</td>
+                            <td>{{ annonce.categorie.nom|default:"Non spécifié" }}</td>
+                            <td>{{ annonce.status }}</td>
+                            <td>{{ annonce.date_publication|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'detail_annonce' annonce.id %}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-title="Voir les détails">Visualiser</a>
+                                    <a href="{% url 'modifier_annonce' annonce.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-title="Modifier l'annonce">Modifier</a>
+                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ annonce.id }}" data-bs-toggle="tooltip" data-bs-title="Supprimer l'annonce">
+                                        Supprimer
+                                    </button>
+                                </div>
+
+                                <!-- Modal de confirmation pour chaque annonce -->
+                                <div class="modal fade" id="deleteModal{{ annonce.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ annonce.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel{{ annonce.id }}">Confirmer la suppression</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr de vouloir supprimer l'annonce "{{ annonce.titre }}" ? Cette action est irréversible.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <form method="post" action="{% url 'supprimer_annonce' annonce.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info">
+                <p>Vous n'avez aucune annonce pour le moment. </p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- JavaScript pour initialiser DataTables, tooltips, et rafraîchir -->
+    <script>
+        $(document).ready(function() {
+            // Initialiser DataTables
+            $('#annoncesTable').DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.13.5/i18n/fr-FR.json"
+                },
+                "pageLength": 10,
+                "order": [[4, "desc"]],
+                "responsive": true,
+                "dom": '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
+            });
+
+            // Initialiser les tooltips Bootstrap
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                trigger: 'hover'
+            });
+
+            // Gestion du bouton Rafraîchir
+            $('#refreshButton').on('click', function() {
+                window.location.reload();
+            });
+        });
+    </script>
+{% endblock %}

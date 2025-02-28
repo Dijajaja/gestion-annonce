@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Modifier une annonce{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Modifier l'annonce : {{ annonce.titre }}</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} mb-3">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="{{ form.titre.id_for_label }}" class="form-label">Titre</label>
+                {{ form.titre }}
+                {% if form.titre.errors %}
+                    <div class="invalid-feedback">{{ form.titre.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="invalid-feedback">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.prix.id_for_label }}" class="form-label">Prix (€)</label>
+                {{ form.prix }}
+                {% if form.prix.errors %}
+                    <div class="invalid-feedback">{{ form.prix.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
+                {{ form.image }}
+                <small class="form-text text-muted">Optionnel : Chargez une nouvelle image ou laissez vide pour conserver l'actuelle.</small>
+                {% if form.image.errors %}
+                    <div class="invalid-feedback">{{ form.image.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.categorie.id_for_label }}" class="form-label">Catégorie</label>
+                {{ form.categorie }}
+                {% if form.categorie.errors %}
+                    <div class="invalid-feedback">{{ form.categorie.errors }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Enregistrer les modifications</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

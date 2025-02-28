@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework',
     'corsheaders',
-    'annonces'
+    'annonces',
+    'django_bootstrap5',
+    'authentification',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +67,7 @@ ROOT_URLCONF = 'plateforme_annonces.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -161,3 +163,10 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+# settings.py
+AUTH_USER_MODEL = 'authentification.Utilisateur'  # Remplacez 'votre_app' par le nom de votre application
+
+LOGIN_URL = 'connexion'
+LOGIN_REDIRECT_URL = 'accueil'  # Remplacez par votre vue d'accueil
+LOGOUT_REDIRECT_URL = 'connexion'

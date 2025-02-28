@@ -5,3 +5,19 @@ __pycache__/
 env/
 media/images_annonces/
 # node_modules/
+
+# Fichiers générés par Django
+*.log
+*.pot
+*.pyc
+staticfiles/
+media/
+
+# IDE/Editeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Fichiers de base de données
+db.sqlite3
