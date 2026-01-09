@@ -26,12 +26,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1v&*-8xyi!+b0bequu4p*0xozq3xklcfe6n6hb46&@#%(41v05'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-1v&*-8xyi!+b0bequu4p*0xozq3xklcfe6n6hb46&@#%(41v05')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
+# Liste des hôtes autorisés pour la production
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -75,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
 
             ],
         },
@@ -87,25 +90,37 @@ WSGI_APPLICATION = 'plateforme_annonces.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DATABASE_NAME'),
-        'USER': os.getenv('DATABASE_USER'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOST'),
-        'PORT': os.getenv('DATABASE_PORT'),
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",  # Active le Mode Strict
-        },
+# Configuration de la base de données
+# Utilise MySQL si les variables d'environnement sont définies, sinon SQLite
+DATABASE_NAME = os.getenv('DATABASE_NAME')
+DATABASE_USER = os.getenv('DATABASE_USER')
+DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
+DATABASE_HOST = os.getenv('DATABASE_HOST')
+DATABASE_PORT = os.getenv('DATABASE_PORT')
+
+if DATABASE_NAME and DATABASE_USER and DATABASE_PASSWORD:
+    # Configuration MySQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': DATABASE_NAME,
+            'USER': DATABASE_USER,
+            'PASSWORD': DATABASE_PASSWORD,
+            'HOST': DATABASE_HOST or 'localhost',
+            'PORT': DATABASE_PORT or '3306',
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
+        }
     }
-}
+else:
+    # Configuration SQLite par défaut
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -131,6 +146,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fr'
 
+LANGUAGES = [
+    ('fr', 'Français'),
+    ('en', 'English'),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -141,7 +165,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Pour collectstatic en production
+
+# Dossiers supplémentaires pour les fichiers statiques
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+] if (BASE_DIR / 'static').exists() else []
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -168,5 +198,30 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'authentification.Utilisateur'  # Remplacez 'votre_app' par le nom de votre application
 
 LOGIN_URL = 'connexion'
-LOGIN_REDIRECT_URL = 'accueil'  # Remplacez par votre vue d'accueil
-LOGOUT_REDIRECT_URL = 'connexion'
+LOGIN_REDIRECT_URL = 'liste_annonces_user'  # Redirige vers les annonces de l'utilisateur après connexion
+LOGOUT_REDIRECT_URL = 'portfolio'  # Redirige vers la page portfolio après déconnexion
+
+# Paramètres de sécurité pour la production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False').lower() == 'true'
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000  # 1 an
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+else:
+    # En développement, désactiver les cookies sécurisés pour permettre HTTP
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+
+# Configuration CORS pour la production
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',') if os.getenv('CORS_ALLOWED_ORIGINS') else []
+CORS_ALLOW_CREDENTIALS = True
+
+# En développement, permettre toutes les origines pour faciliter les tests
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = False  # Ne pas permettre toutes les origines pour la sécurité
+    CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']

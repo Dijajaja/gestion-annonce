@@ -23,13 +23,29 @@
             <thead class="table-dark">
                 <tr>
                     <th>Nom</th>
+                    <th>Description</th>
+                    <th>Icône</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for categorie in categories %}
                     <tr>
-                        <td>{{ categorie.nom }}</td>
+                        <td><strong>{{ categorie.get_translated_nom }}</strong></td>
+                        <td>
+                            {% if categorie.description %}
+                                {{ categorie.description|truncatewords:10 }}
+                            {% else %}
+                                <span class="text-muted">Aucune description</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if categorie.icone %}
+                                <i class="{{ categorie.icone }} fa-2x text-primary"></i>
+                            {% else %}
+                                <span class="text-muted">Aucune icône</span>
+                            {% endif %}
+                        </td>
                         <td>
                             <div class="d-flex gap-2">
                                 <a href="{% url 'modifier_categorie' categorie.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-title="Modifier la catégorie">Modifier</a>

@@ -1,62 +1,481 @@
 {% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load i18n %}
+
+{% block title %}{% trans "Inscription" %} - AdPlus{% endblock %}
+
+{% block navbar %}
+<!-- Header personnalisé comme la landing page -->
+<div class="landing-header">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center" style="gap: 0.5rem;">
+            <div class="d-flex align-items-center" style="gap: 0.5rem;">
+                <a href="{% url 'portfolio' %}" class="landing-logo" style="margin-right: 0;">
+                    <div class="landing-logo-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <span>AdPlus</span>
+                </a>
+                <a href="{% url 'liste_annonces' %}" class="landing-nav-link" style="margin-left: 0;">
+                    <i class="fas fa-bars"></i> {% trans "Annonces" %}
+                </a>
+            </div>
+            <div class="landing-nav" style="margin-left: auto;">
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'connexion' %}" class="landing-nav-link">
+                        <i class="fas fa-arrow-right"></i> {% trans "Connexion" %}
+                    </a>
+                    <a href="{% url 'inscription' %}" class="landing-nav-button">
+                        <i class="fas fa-user-plus"></i> {% trans "Inscription" %}
+                    </a>
+                {% else %}
+                    <a href="{% url 'deconnexion' %}" class="landing-nav-link">
+                        <i class="fas fa-sign-out-alt"></i> {% trans "Déconnexion" %}
+                    </a>
+                {% endif %}
+                <!-- Sélecteur de thème -->
+                <button class="theme-toggle" id="themeToggle" aria-label="{% trans 'Changer de thème' %}" title="{% trans 'Changer de thème' %}" style="margin-right: 0.5rem;">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <!-- Sélecteur de langue -->
+                <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    <select name="language" onchange="this.form.submit()" class="form-select form-select-sm d-inline-block" style="width: auto;">
+                        {% get_current_language as CURRENT_LANGUAGE %}
+                        <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>🇫🇷 FR</option>
+                        <option value="en" {% if CURRENT_LANGUAGE == 'en' %}selected{% endif %}>🇬🇧 EN</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /* Styles du header landing pour les pages de connexion */
+    .landing-header {
+        padding: 1rem 0;
+        position: relative;
+        z-index: 10;
+        background: rgba(30, 58, 138, 0.95);
+        backdrop-filter: blur(10px);
+    }
+    .landing-header .container {
+        max-width: 1200px;
+    }
+    .landing-logo {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        text-decoration: none;
+        margin: 0;
+        padding: 0;
+    }
+    .landing-logo-icon {
+        width: 32px;
+        height: 32px;
+        background: #ffffff;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1e3a8a;
+        font-size: 1.1rem;
+    }
+    .landing-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .landing-nav select[name="language"] {
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-radius: 6px !important;
+        padding: 0.4rem 0.6rem !important;
+        font-size: 0.9rem !important;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .landing-nav select[name="language"]:hover {
+        background: rgba(255, 255, 255, 0.25) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+    .landing-nav select[name="language"] option {
+        background: #1e3a8a;
+        color: white;
+    }
+    .landing-nav-link {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin: 0;
+        padding: 0;
+    }
+    .landing-nav-link:hover {
+        opacity: 0.8;
+        color: #ffffff;
+    }
+    .landing-nav-button {
+        background: #ffffff;
+        color: #1e3a8a;
+        padding: 0.625rem 1.25rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .landing-nav-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        color: #1e3a8a;
+    }
+    .theme-toggle {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+        border-radius: 50px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        border: none;
+    }
+    .theme-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+    }
+    /* Support thème sombre pour les pages d'inscription */
+    [data-theme="dark"] .landing-header {
+        background: rgba(15, 23, 42, 0.95);
+    }
+    [data-theme="dark"] .content-section {
+        background: var(--bg-white);
+        border-color: var(--border-color);
+    }
+    [data-theme="dark"] .form-control,
+    [data-theme="dark"] .form-select {
+        background: var(--bg-white);
+        border-color: var(--border-color);
+        color: var(--text-dark);
+    }
+    [data-theme="dark"] .form-label {
+        color: var(--text-gray);
+    }
+    [data-theme="dark"] .text-muted {
+        color: var(--text-gray) !important;
+    }
+    /* Styles pour les input-group améliorés */
+    .input-group-text {
+        border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    }
+    .input-group .form-control {
+        border-left: none;
+    }
+    .input-group .form-control:focus {
+        border-left: 1px solid var(--primary-blue);
+        margin-left: -1px;
+    }
+    .input-group .btn-outline-secondary {
+        border-left: none;
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Inscription</h2>
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-    
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="content-section">
+            <div class="text-center mb-4">
+                <i class="fas fa-user-plus fa-3x text-gradient mb-3"></i>
+                <h2 class="text-gradient">{% trans "Inscription" %}</h2>
+                <p class="text-muted">{% trans "Créez votre compte AdPlus" %}</p>
+            </div>
 
-        <div class="card-body">
-            <form method="post" class="needs-validation" novalidate>
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% for error in form.non_field_errors %}
+                        <i class="fas fa-exclamation-circle"></i> {{ error }}
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+
+            <form method="post" class="needs-validation" novalidate id="inscriptionForm">
                 {% csrf_token %}
                 
-                <div class="mb-3">
-                    <label for="{{ form.username.id_for_label }}" class="form-label">Nom d'utilisateur</label>
-                    {{ form.username }}
+                <div class="mb-4">
+                    <label for="{{ form.username.id_for_label }}" class="form-label fw-semibold">
+                        <i class="fas fa-user me-2"></i> {% trans "Nom d'utilisateur" %}
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-user text-muted"></i>
+                        </span>
+                        {{ form.username }}
+                    </div>
                     {% if form.username.errors %}
-                        <div class="text-danger">{{ form.username.errors }}</div>
+                        <div class="text-danger small mt-2">
+                            <i class="fas fa-exclamation-circle"></i> {{ form.username.errors.0 }}
+                        </div>
+                    {% elif form.username.help_text %}
+                        <div class="form-text">{{ form.username.help_text }}</div>
                     {% endif %}
                 </div>
 
-                <div class="mb-3">
-                    <label for="{{ form.email.id_for_label }}" class="form-label">Adresse électronique</label>
-                    {{ form.email }}
+                <div class="mb-4">
+                    <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold">
+                        <i class="fas fa-envelope me-2"></i> {% trans "Adresse électronique" %}
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-envelope text-muted"></i>
+                        </span>
+                        {{ form.email }}
+                    </div>
                     {% if form.email.errors %}
-                        <div class="text-danger">{{ form.email.errors }}</div>
+                        <div class="text-danger small mt-2">
+                            <i class="fas fa-exclamation-circle"></i> {{ form.email.errors.0 }}
+                        </div>
                     {% endif %}
                 </div>
 
-                <div class="mb-3">
-                    <label for="{{ form.telephone.id_for_label }}" class="form-label">Téléphone</label>
-                    {{ form.telephone }}
+                <div class="mb-4">
+                    <label for="{{ form.telephone.id_for_label }}" class="form-label fw-semibold">
+                        <i class="fas fa-phone me-2"></i> {% trans "Téléphone" %} <span class="text-muted small">({% trans "optionnel" %})</span>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-phone text-muted"></i>
+                        </span>
+                        {{ form.telephone }}
+                    </div>
                     {% if form.telephone.errors %}
-                        <div class="text-danger">{{ form.telephone.errors }}</div>
+                        <div class="text-danger small mt-2">
+                            <i class="fas fa-exclamation-circle"></i> {{ form.telephone.errors.0 }}
+                        </div>
+                    {% elif form.telephone.help_text %}
+                        <div class="form-text">{{ form.telephone.help_text }}</div>
                     {% endif %}
                 </div>
 
-                <div class="mb-3">
-                    <label for="{{ form.password1.id_for_label }}" class="form-label">Mot de passe</label>
-                    {{ form.password1 }}
+                <div class="mb-4">
+                    <label for="{{ form.password1.id_for_label }}" class="form-label fw-semibold">
+                        <i class="fas fa-lock me-2"></i> {% trans "Mot de passe" %}
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-lock text-muted"></i>
+                        </span>
+                        {{ form.password1 }}
+                        <button class="btn btn-outline-secondary border-start-0" type="button" id="togglePassword1" onclick="togglePassword('{{ form.password1.id_for_label }}', 'togglePassword1')">
+                            <i class="fas fa-eye" id="iconPassword1"></i>
+                        </button>
+                    </div>
                     {% if form.password1.errors %}
-                        <div class="text-danger">{{ form.password1.errors }}</div>
+                        <div class="text-danger small mt-2">
+                            <i class="fas fa-exclamation-circle"></i> {{ form.password1.errors.0 }}
+                        </div>
                     {% endif %}
+                    {% if form.password1.help_text %}
+                        <div class="form-text">{{ form.password1.help_text }}</div>
+                    {% endif %}
+                    <div id="passwordStrength" class="mt-2" style="display: none;">
+                        <div class="progress" style="height: 5px;">
+                            <div id="passwordStrengthBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small id="passwordStrengthText" class="text-muted"></small>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="{{ form.password2.id_for_label }}" class="form-label">Confirmer le mot de passe</label>
-                    {{ form.password2 }}
+                <div class="mb-4">
+                    <label for="{{ form.password2.id_for_label }}" class="form-label fw-semibold">
+                        <i class="fas fa-lock me-2"></i> {% trans "Confirmer le mot de passe" %}
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-lock text-muted"></i>
+                        </span>
+                        {{ form.password2 }}
+                        <button class="btn btn-outline-secondary border-start-0" type="button" id="togglePassword2" onclick="togglePassword('{{ form.password2.id_for_label }}', 'togglePassword2')">
+                            <i class="fas fa-eye" id="iconPassword2"></i>
+                        </button>
+                    </div>
                     {% if form.password2.errors %}
-                        <div class="text-danger">{{ form.password2.errors }}</div>
+                        <div class="text-danger small mt-2">
+                            <i class="fas fa-exclamation-circle"></i> {{ form.password2.errors.0 }}
+                        </div>
                     {% endif %}
+                    {% if form.password2.help_text %}
+                        <div class="form-text">{{ form.password2.help_text }}</div>
+                    {% endif %}
+                    <div id="passwordMatch" class="mt-2"></div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">S'inscrire</button>
+                <div class="d-grid gap-2 mb-4">
+                    <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                        <i class="fas fa-user-plus me-2"></i> {% trans "S'inscrire" %}
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <p class="mb-0 text-muted">
+                        {% trans "Déjà un compte ?" %} 
+                        <a href="{% url 'connexion' %}" class="text-decoration-none fw-semibold">
+                            {% trans "Se connecter" %} <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </p>
+                </div>
             </form>
         </div>
-
+    </div>
 </div>
+
+<script>
+function togglePassword(inputId, buttonId) {
+    const input = document.getElementById(inputId);
+    const iconId = buttonId.replace('toggle', 'icon');
+    const icon = document.getElementById(iconId);
+    
+    if (input && icon) {
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+}
+
+// Validation HTML5
+(function() {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+
+// Vérification de la force du mot de passe
+document.addEventListener('DOMContentLoaded', function() {
+    const password1 = document.getElementById('id_password1');
+    const password2 = document.getElementById('id_password2');
+    const strengthBar = document.getElementById('passwordStrengthBar');
+    const strengthText = document.getElementById('passwordStrengthText');
+    const strengthDiv = document.getElementById('passwordStrength');
+    const matchDiv = document.getElementById('passwordMatch');
+    
+    if (password1) {
+        password1.addEventListener('input', function() {
+            const password = this.value;
+            if (password.length > 0) {
+                strengthDiv.style.display = 'block';
+                const strength = checkPasswordStrength(password);
+                strengthBar.style.width = strength.percentage + '%';
+                strengthBar.className = 'progress-bar ' + strength.class;
+                strengthText.textContent = strength.text;
+                strengthText.className = strength.textClass;
+            } else {
+                strengthDiv.style.display = 'none';
+            }
+        });
+    }
+    
+    // Vérification de correspondance des mots de passe
+    if (password1 && password2) {
+        [password1, password2].forEach(input => {
+            input.addEventListener('input', function() {
+                if (password2.value.length > 0) {
+                    if (password1.value === password2.value) {
+                        matchDiv.innerHTML = '<small class="text-success"><i class="fas fa-check-circle"></i> Les mots de passe correspondent</small>';
+                    } else {
+                        matchDiv.innerHTML = '<small class="text-danger"><i class="fas fa-times-circle"></i> Les mots de passe ne correspondent pas</small>';
+                    }
+                } else {
+                    matchDiv.innerHTML = '';
+                }
+            });
+        });
+    }
+});
+
+function checkPasswordStrength(password) {
+    let strength = 0;
+    let feedback = [];
+    
+    if (password.length >= 8) strength += 20;
+    else feedback.push('Au moins 8 caractères');
+    
+    if (password.length >= 12) strength += 10;
+    if (/[a-z]/.test(password)) strength += 15;
+    else feedback.push('une minuscule');
+    if (/[A-Z]/.test(password)) strength += 15;
+    else feedback.push('une majuscule');
+    if (/[0-9]/.test(password)) strength += 15;
+    else feedback.push('un chiffre');
+    if (/[^a-zA-Z0-9]/.test(password)) strength += 15;
+    else feedback.push('un caractère spécial');
+    
+    if (strength < 30) {
+        return {
+            percentage: strength,
+            class: 'bg-danger',
+            text: 'Très faible' + (feedback.length > 0 ? ' - Ajoutez: ' + feedback.slice(0, 2).join(', ') : ''),
+            textClass: 'text-danger'
+        };
+    } else if (strength < 50) {
+        return {
+            percentage: strength,
+            class: 'bg-warning',
+            text: 'Faible' + (feedback.length > 0 ? ' - Ajoutez: ' + feedback.slice(0, 2).join(', ') : ''),
+            textClass: 'text-warning'
+        };
+    } else if (strength < 70) {
+        return {
+            percentage: strength,
+            class: 'bg-info',
+            text: 'Moyen',
+            textClass: 'text-info'
+        };
+    } else if (strength < 90) {
+        return {
+            percentage: strength,
+            class: 'bg-primary',
+            text: 'Fort',
+            textClass: 'text-primary'
+        };
+    } else {
+        return {
+            percentage: 100,
+            class: 'bg-success',
+            text: 'Très fort',
+            textClass: 'text-success'
+        };
+    }
+}
+</script>
 {% endblock %}

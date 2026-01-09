@@ -26,7 +26,9 @@ def modifier_annonce(request, annonce_id):
         form = AnnonceCreationForm(request.POST, request.FILES, instance=annonce)
         if form.is_valid():
             form.save()
-            return redirect('liste_annonces')  
+            from django.contrib import messages
+            messages.success(request, 'Votre annonce a été modifiée avec succès.')
+            return redirect('liste_annonces_user')  
     else:
         form = AnnonceCreationForm(instance=annonce)
     return render(request, 'modifier_annonce.html', {'form': form, 'annonce': annonce})
@@ -37,8 +39,10 @@ def supprimer_annonce(request, annonce_id):
     annonce = get_object_or_404(Annonce, id=annonce_id, proprietaire=request.user) 
     if request.method == 'POST':
         annonce.delete()
-        return redirect('liste_annonces') 
-    return redirect('liste_annonces')
+        from django.contrib import messages
+        messages.success(request, 'Votre annonce a été supprimée avec succès.')
+        return redirect('liste_annonces_user') 
+    return redirect('liste_annonces_user')
 
 @login_required
 @user_passes_test(lambda u: est_dans_groupe(u, ['client']), login_url='/connexion/')
@@ -50,7 +54,9 @@ def creer_annonce(request):
             annonce.proprietaire = request.user 
             annonce.status = 'en_attente' 
             annonce.save()
-            return redirect('liste_annonces')  
+            from django.contrib import messages
+            messages.success(request, 'Votre annonce a été créée avec succès et est en attente de validation.')
+            return redirect('liste_annonces_user')  
     else:
         form = AnnonceCreationForm()
     
@@ -63,26 +69,126 @@ def liste_annonces_user(request):
         if request.user.role == 'admin' :
             return redirect('admin_dashboard')
         else:
-            annonces = Annonce.objects.filter(proprietaire=request.user)
-            return render(request, 'liste_annonces.html', {'annonces': annonces})
+            annonces = Annonce.objects.filter(proprietaire=request.user)  # type: ignore
+            
+            # Filtrage par statut
+            status_filter = request.GET.get('status', '')
+            if status_filter:
+                annonces = annonces.filter(status=status_filter)
+            
+            return render(request, 'liste_annonces.html', {'annonces': annonces, 'status': status_filter})
     else:
-        annonces = Annonce.objects.filter(status='valide')
+        annonces = Annonce.objects.filter(status='valide')  # type: ignore
     return render(request, 'home.html', {'annonces': annonces})
+
+def portfolio_page(request):
+    """Page portfolio - Page d'accueil principale"""
+    return render(request, 'portfolio.html')
 
 def liste_annonces(request):
-    status = request.GET.get('status', None)
-    if request.user.is_authenticated :
-        if request.user.role == 'admin' :
-            return redirect('admin_dashboard')
-        else:
-            return redirect('liste_annonces_user')
-    else:
-        annonces = Annonce.objects.filter(status='valide')
-    return render(request, 'home.html', {'annonces': annonces})
+    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+    from django.db.models import Q
+    
+    # Si l'utilisateur est admin, rediriger vers le dashboard
+    if request.user.is_authenticated and request.user.role == 'admin':
+        return redirect('admin_dashboard')
+    
+    # Récupération des paramètres de recherche et filtrage
+    query = request.GET.get('q', '')
+    categorie_id = request.GET.get('categorie', '')
+    prix_min = request.GET.get('prix_min', '')
+    prix_max = request.GET.get('prix_max', '')
+    ville = request.GET.get('ville', '')
+    tri = request.GET.get('tri', 'date_desc')  # date_desc, date_asc, prix_asc, prix_desc
+    
+    # Afficher toutes les annonces validées pour tous les utilisateurs (Explorer)
+    annonces = Annonce.objects.filter(status='valide')  # type: ignore
+    
+    # Filtrage par recherche
+    if query:
+        annonces = annonces.filter(
+            Q(titre__icontains=query) |  # type: ignore
+            Q(description__icontains=query) |  # type: ignore
+            Q(ville__icontains=query)
+        )
+    
+    # Filtrage par catégorie
+    if categorie_id:
+        annonces = annonces.filter(categorie_id=categorie_id)
+    
+    # Filtrage par prix
+    if prix_min:
+        try:
+            annonces = annonces.filter(prix__gte=float(prix_min))
+        except ValueError:
+            pass
+    if prix_max:
+        try:
+            annonces = annonces.filter(prix__lte=float(prix_max))
+        except ValueError:
+            pass
+    
+    # Filtrage par ville
+    if ville:
+        annonces = annonces.filter(ville__icontains=ville)
+    
+    # Tri
+    if tri == 'date_asc':
+        annonces = annonces.order_by('date_publication')
+    elif tri == 'prix_asc':
+        annonces = annonces.order_by('prix')
+    elif tri == 'prix_desc':
+        annonces = annonces.order_by('-prix')
+    else:  # date_desc par défaut
+        annonces = annonces.order_by('-date_publication')
+    
+    # Pagination
+    paginator = Paginator(annonces, 12)  # 12 annonces par page
+    page = request.GET.get('page', 1)
+    try:
+        annonces_page = paginator.page(page)
+    except PageNotAnInteger:
+        annonces_page = paginator.page(1)
+    except EmptyPage:
+        annonces_page = paginator.page(paginator.num_pages)
+    
+    # Récupération des catégories pour le filtre
+    categories = Categorie.objects.all()  # type: ignore
+    
+    context = {
+        'annonces': annonces_page,
+        'categories': categories,
+        'query': query,
+        'categorie_id': categorie_id,
+        'prix_min': prix_min,
+        'prix_max': prix_max,
+        'ville': ville,
+        'tri': tri,
+    }
+    
+    # Ajouter le nombre total d'annonces pour les stats
+    if hasattr(annonces_page, 'paginator'):
+        context['total_annonces'] = annonces_page.paginator.count
+    
+    return render(request, 'home.html', context)
 
 def detail_annonce(request, annonce_id):
-    annonce = get_object_or_404(Annonce, id=annonce_id) 
-    return render(request, 'detail_annonce.html', {'annonce': annonce})
+    annonce = get_object_or_404(Annonce, id=annonce_id)
+    
+    # Incrémenter le compteur de vues si l'annonce est validée
+    if annonce.status == 'valide':
+        annonce.incrementer_vues()
+    
+    # Récupérer des annonces similaires (même catégorie)
+    annonces_similaires = Annonce.objects.filter(  # type: ignore
+        categorie=annonce.categorie,
+        status='valide'
+    ).exclude(id=annonce.id)[:4]
+    
+    return render(request, 'detail_annonce.html', {
+        'annonce': annonce,
+        'annonces_similaires': annonces_similaires
+    })
 
 
 # @api_view(['GET','POST'])

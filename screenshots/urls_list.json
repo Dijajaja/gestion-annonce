@@ -1,0 +1,92 @@
+{
+  "base_url": "http://127.0.0.1:8000",
+  "pages": [
+    {
+      "name": "portfolio",
+      "url": "http://127.0.0.1:8000/",
+      "description": "Page Portfolio (Accueil)"
+    },
+    {
+      "name": "liste_annonces",
+      "url": "http://127.0.0.1:8000/app/",
+      "description": "Liste des annonces publiques"
+    },
+    {
+      "name": "detail_annonce",
+      "url": "http://127.0.0.1:8000/annonces/10/",
+      "description": "Détail de l'annonce: Assistance Numérique"
+    },
+    {
+      "name": "connexion",
+      "url": "http://127.0.0.1:8000/connexion/",
+      "description": "Page de connexion"
+    },
+    {
+      "name": "inscription",
+      "url": "http://127.0.0.1:8000/inscription/",
+      "description": "Page d'inscription"
+    },
+    {
+      "name": "admin_dashboard",
+      "url": "http://127.0.0.1:8000/admins/",
+      "description": "Tableau de bord admin",
+      "requires_auth": true
+    },
+    {
+      "name": "admin_categories",
+      "url": "http://127.0.0.1:8000/admins/categories/",
+      "description": "Liste des catégories (admin)",
+      "requires_auth": true
+    },
+    {
+      "name": "admin_creer_annonce",
+      "url": "http://127.0.0.1:8000/admins/creer/",
+      "description": "Créer une annonce (admin)",
+      "requires_auth": true
+    },
+    {
+      "name": "admin_modifier_annonce",
+      "url": "http://127.0.0.1:8000/admins/modifier/10/",
+      "description": "Modifier annonce 10 (admin)",
+      "requires_auth": true
+    },
+    {
+      "name": "admin_modifier_categorie",
+      "url": "http://127.0.0.1:8000/admins/categories/modifier/20/",
+      "description": "Modifier catégorie 20 (admin)",
+      "requires_auth": true
+    },
+    {
+      "name": "admin_creer_categorie",
+      "url": "http://127.0.0.1:8000/admins/categories/creer/",
+      "description": "Créer une catégorie (admin)",
+      "requires_auth": true
+    },
+    {
+      "name": "mes_annonces",
+      "url": "http://127.0.0.1:8000/mes-annonces/",
+      "description": "Mes annonces (utilisateur)",
+      "requires_auth": true,
+      "role": "client"
+    },
+    {
+      "name": "creer_annonce",
+      "url": "http://127.0.0.1:8000/creer/",
+      "description": "Créer une annonce (utilisateur)",
+      "requires_auth": true,
+      "role": "client"
+    },
+    {
+      "name": "modifier_annonce",
+      "url": "http://127.0.0.1:8000/modifier/10/",
+      "description": "Modifier annonce 10 (utilisateur)",
+      "requires_auth": true,
+      "role": "client"
+    }
+  ],
+  "instructions": {
+    "public": "Ces pages peuvent être capturées sans authentification",
+    "requires_auth": "Ces pages nécessitent une connexion (admin ou client)",
+    "note": "Pour les pages nécessitant authentification, connectez-vous d'abord manuellement"
+  }
+}

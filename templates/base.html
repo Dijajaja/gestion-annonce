@@ -1,41 +1,208 @@
 {% load static %}
+{% load i18n %}
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Plateforme des aAnnonces{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AdPlus - Plateforme d'Annonces{% endblock %}</title>
+    <link rel="icon" type="image/jpeg" href="{% static 'images/photo-profil.jpg' %}">
+    <link rel="shortcut icon" type="image/jpeg" href="{% static 'images/photo-profil.jpg' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/photo-profil.jpg' %}">
+    {% block extra_head %}{% endblock %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
 
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
+    
      <style>
-        /* Ajout de styles pour le footer collé en bas */
+        :root {
+            --primary-blue: #1e3a8a;
+            --primary-blue-light: #3b82f6;
+            --gradient-purple-start: #6366f1;
+            --gradient-purple-end: #8b5cf6;
+            --text-white: #ffffff;
+            --text-dark: #1f2937;
+            --text-gray: #6b7280;
+            --bg-light: #f9fafb;
+            --bg-white: #ffffff;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         html, body {
             height: 100%;
             margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
         
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background-color: var(--bg-light);
         }
         
+        /* Navigation moderne */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%) !important;
+            box-shadow: var(--shadow-md);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-white) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+            color: var(--text-white) !important;
+        }
+
+        .navbar-brand i {
+            font-size: 1.3rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-white) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            margin: 0 0.25rem;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-white) !important;
+        }
+
+        .navbar-nav .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Contenu principal */
         .content {
-            flex: 1 0 auto; /* Permet au contenu de s'étendre et de pousser le footer en bas */
+            flex: 1 0 auto;
+            padding: 2rem 0;
         }
-        
-        .footer {
-            flex-shrink: 0; /* Empêche le footer de rétrécir */
-            background-color: #343a40; /* Couleur de fond sombre pour correspondre à votre navbar */
-            color: white;
+
+        /* Page header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+            color: var(--text-white);
+            padding: 3rem 0;
+            margin-bottom: 2rem;
         }
-        
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Cards modernes */
         .card {
-            width: 16rem;  /* Réduit légèrement la largeur pour éviter de dépasser */
-            margin-bottom: 1rem;  /* Ajuste les marges si nécessaire */
+            border: none;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+            color: var(--text-white);
+            border: none;
+            padding: 1.25rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Boutons modernes */
+        .btn {
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            padding: 0.625rem 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-blue-light) 0%, var(--gradient-purple-end) 100%);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background-color: var(--text-gray);
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--text-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Formulaires modernes */
+        .form-control, .form-select {
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Images d'annonces */
+        .image-container {
+            overflow: hidden;
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
         }
         
         .card-img-top {
@@ -45,85 +212,351 @@
             transition: transform 0.3s ease;
         }
         
-        .card-img-top:hover {
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+        
+        /* Badges */
+        .badge {
+            border-radius: var(--radius-sm);
+            padding: 0.375rem 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Alerts */
+        .alert {
+            border-radius: var(--radius-sm);
+            border: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Pagination */
+        .pagination .page-link {
+            border-radius: var(--radius-sm);
+            margin: 0 0.25rem;
+            border: 1px solid var(--border-color);
+            color: var(--primary-blue);
+        }
+
+        .pagination .page-item.active .page-link {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+            border-color: var(--primary-blue);
+        }
+
+        /* Footer */
+        .footer {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+            color: var(--text-white);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Sections de contenu */
+        .content-section {
+            background: var(--text-white);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 1rem 0;
+            }
+        }
+
+        /* Utilitaires */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Sélecteur de thème */
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-white);
+            border-radius: 50px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            margin-left: 0.5rem;
+            margin-right: 0.75rem;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
             transform: scale(1.1);
         }
         
-        .image-container {
-            overflow: hidden;
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
         }
-        .custom-password {
-            background-color: white !important;
-            border: 2px solid #007bff !important;
+
+        /* Support thème sombre */
+        [data-theme="dark"] {
+            --bg-light: #1f2937;
+            --bg-white: #374151;
+            --text-dark: #f9fafb;
+            --text-gray: #d1d5db;
+            --border-color: #4b5563;
         }
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            background-color: #f9f9f9;
+
+        [data-theme="dark"] body {
+            background-color: var(--bg-light);
         }
-             
+
+        [data-theme="dark"] .card,
+        [data-theme="dark"] .content-section {
+            background: var(--bg-white);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select {
+            background: var(--bg-white);
+            border-color: var(--border-color);
+            color: var(--text-dark);
+        }
+
+        [data-theme="dark"] .form-label {
+            color: var(--text-gray);
+        }
+
+        [data-theme="dark"] .alert {
+            background: var(--bg-white);
+            border-color: var(--border-color);
+        }
     </style>
+    
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-
-
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    {% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{% url 'liste_annonces' %}">
-                <i class="fas fa-bullhorn"></i>
+            <a class="navbar-brand" href="{% url 'portfolio' %}">
+                <i class="fas fa-bullhorn"></i> AdPlus
             </a>
-            {% if user.is_authenticated and user.role == 'admin' %}
-                <div class="navbar-nav">
-                    <a class="nav-link btn text-primary ms-2 text-white {% if request.resolver_match.url_name == 'liste_annonces' %}active{% endif %}" 
-                    href="{% url 'liste_annonces' %}">Annonces</a>
-                    <a class="nav-link btn text-primary ms-2 text-white {% if request.resolver_match.url_name == 'liste_categories' %}active{% endif %}" 
-                    href="{% url 'liste_categories' %}">Catégories</a>
-                </div>
-            {% endif %}
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'portfolio' %}active{% endif %}" href="{% url 'portfolio' %}">
+                            <i class="fas fa-user-circle"></i> {% trans "Portfolio" %}
+                        </a>
+                    </li>
                     {% if user.is_authenticated %}
-                        
-                        {% comment %} <li class="nav-item">
-                            <a class="nav-link btn btn-outline-light text-primary ms-2 text-white" href="{% url 'creer_annonce' %}">Créer une annonce</a>
-                        </li> {% endcomment %}
-                        {% comment %} <li class="nav-item">
-                            <span class="nav-link text-white">Bonjour, {{ user.username }} !</span>
-                        </li> {% endcomment %}
+                        {% if user.role == 'admin' or user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}" href="{% url 'admin_dashboard' %}">
+                                    <i class="fas fa-tachometer-alt"></i> {% trans "Dashboard" %}
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'liste_annonces_user' %}active{% endif %}" href="{% url 'liste_annonces_user' %}">
+                                    <i class="fas fa-user"></i> {% trans "Mes Annonces" %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'creer_annonce' %}active{% endif %}" href="{% url 'creer_annonce' %}">
+                                    <i class="fas fa-plus"></i> {% trans "Créer" %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'liste_annonces' %}active{% endif %}" href="{% url 'liste_annonces' %}">
+                                    <i class="fas fa-list"></i> {% trans "Explorer" %}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link  text-primary ms-2 text-white" href="{% url 'deconnexion' %}">Déconnexion</a>
+                            <span class="nav-link">
+                                <i class="fas fa-user-circle"></i> {{ user.username }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'deconnexion' %}">
+                                <i class="fas fa-sign-out-alt"></i> {% trans "Déconnexion" %}
+                            </a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link text-primary me-2 text-white" href="{% url 'connexion' %}">Connexion</a>
+                            <a class="nav-link" href="{% url 'connexion' %}">
+                                <i class="fas fa-sign-in-alt"></i> {% trans "Connexion" %}
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  text-primary me-8 text-white" href="{% url 'inscription' %}">Inscription</a>
+                            <a class="nav-link btn btn-light text-primary ms-2" href="{% url 'inscription' %}">
+                                <i class="fas fa-user-plus"></i> {% trans "Inscription" %}
+                            </a>
                         </li>
                     {% endif %}
+                    <!-- Sélecteur de thème -->
+                    <li class="nav-item">
+                        <button class="theme-toggle" id="themeToggle" aria-label="{% trans 'Changer de thème' %}" title="{% trans 'Changer de thème' %}">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
+                    </li>
+                    <!-- Sélecteur de langue -->
+                    <li class="nav-item" style="margin-left: 0.25rem;">
+                        <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.path }}">
+                            <select name="language" onchange="this.form.submit()" class="form-select form-select-sm d-inline-block" style="width: auto; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 0.25rem 0.5rem; font-size: 0.9rem; margin-top: 0.5rem;">
+                                {% get_current_language as CURRENT_LANGUAGE %}
+                                <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>🇫🇷 FR</option>
+                                <option value="en" {% if CURRENT_LANGUAGE == 'en' %}selected{% endif %}>🇬🇧 EN</option>
+                            </select>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
+    {% endblock %}
 
-    
-    <div class="container content mt-4">
+    <div class="content">
+        <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' or message.tags == 'danger' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+            
         {% block content %}{% endblock %}
+        </div>
     </div>
 
-
-    <footer class="footer mt-5">
+    {% block footer %}
+    <footer class="footer">
         <div class="container">
-            <p class="mb-0">© 2025 Annonces App | Tous droits réservés.</p>
+            <p class="mb-0">
+                <i class="fas fa-bullhorn"></i> © 2025 AdPlus | {% trans "Tous droits réservés." %}
+            </p>
         </div>
     </footer>
+    {% endblock %}
 
     {% bootstrap_javascript %}
 
+    {% block extra_js %}{% endblock %}
+    
+    <script>
+        // Gestionnaire de thème - S'exécute seulement si le thème n'a pas déjà été initialisé
+        (function() {
+            // Attendre que le DOM soit chargé pour s'assurer que les blocks extra_js ont été exécutés
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initTheme);
+            } else {
+                // Le DOM est déjà chargé, attendre un peu pour laisser les scripts de extra_js s'exécuter
+                setTimeout(initTheme, 100);
+            }
+            
+            function initTheme() {
+                const themeToggle = document.getElementById('themeToggle');
+                const themeIcon = document.getElementById('themeIcon');
+                const html = document.documentElement;
+                
+                // Vérifier si le thème a déjà été initialisé (attribut data-theme déjà présent)
+                // ou si le bouton a déjà un gestionnaire d'événement
+                if (!themeToggle || !themeIcon) {
+                    return; // Les éléments n'existent pas sur cette page
+                }
+                
+                // Si le thème est déjà appliqué et que le bouton a déjà un onclick, ne rien faire
+                if (html.getAttribute('data-theme') && themeToggle.onclick) {
+                    return; // Déjà initialisé par un autre script
+                }
+                
+                // Récupérer le thème sauvegardé ou utiliser le thème système
+                function getInitialTheme() {
+                    const savedTheme = localStorage.getItem('app-theme');
+                    if (savedTheme) {
+                        return savedTheme;
+                    }
+                    // Détecter la préférence système
+                    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                
+                // Appliquer le thème
+                function setTheme(theme) {
+                    if (theme === 'dark') {
+                        html.setAttribute('data-theme', 'dark');
+                        themeIcon.classList.remove('fa-moon');
+                        themeIcon.classList.add('fa-sun');
+                        localStorage.setItem('app-theme', 'dark');
+                    } else {
+                        html.removeAttribute('data-theme');
+                        themeIcon.classList.remove('fa-sun');
+                        themeIcon.classList.add('fa-moon');
+                        localStorage.setItem('app-theme', 'light');
+                    }
+                }
+                
+                // Initialiser le thème seulement s'il n'est pas déjà défini
+                const currentTheme = html.getAttribute('data-theme');
+                if (!currentTheme) {
+                    setTheme(getInitialTheme());
+                } else {
+                    // Synchroniser l'icône avec le thème actuel
+                    if (currentTheme === 'dark') {
+                        themeIcon.classList.remove('fa-moon');
+                        themeIcon.classList.add('fa-sun');
+                    } else {
+                        themeIcon.classList.remove('fa-sun');
+                        themeIcon.classList.add('fa-moon');
+                    }
+                }
+                
+                // Ajouter le gestionnaire d'événement seulement s'il n'existe pas déjà
+                if (!themeToggle.onclick) {
+                    themeToggle.addEventListener('click', function() {
+                        const currentTheme = html.getAttribute('data-theme');
+                        setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+                    });
+                }
+                
+                // Écouter les changements de préférence système (optionnel)
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                    if (!localStorage.getItem('app-theme')) {
+                        setTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

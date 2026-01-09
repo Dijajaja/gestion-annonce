@@ -1,0 +1,1976 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-09 19:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Nombre d'annonces"
+msgstr "Number of ads"
+
+msgid "Informations principales"
+msgstr "Main information"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Localisation"
+msgstr "Location"
+
+msgid "Statistiques"
+msgstr "Statistics"
+
+msgid "Aucune image"
+msgstr "No image"
+
+msgid "Aperçu"
+msgstr "Preview"
+
+msgid "Prix"
+msgstr "Price"
+
+msgid "Validé"
+msgstr "Validated"
+
+msgid "En attente"
+msgstr "Pending"
+
+msgid "Rejeté"
+msgstr "Rejected"
+
+msgid "Statut"
+msgstr "Status"
+
+#, python-brace-format
+msgid "{} annonce(s) validée(s) avec succès."
+msgstr "{} ad(s) validated successfully."
+
+msgid "Valider les annonces sélectionnées"
+msgstr "Validate selected ads"
+
+#, python-brace-format
+msgid "{} annonce(s) rejetée(s)."
+msgstr "{} ad(s) rejected."
+
+msgid "Rejeter les annonces sélectionnées"
+msgstr "Reject selected ads"
+
+#, python-brace-format
+msgid "{} annonce(s) mise(s) en attente."
+msgstr "{} ad(s) put on hold."
+
+msgid "Mettre en attente les annonces sélectionnées"
+msgstr "Put selected ads on hold"
+
+msgid "Choisir un fichier"
+msgstr "Choose file"
+
+msgid "Aucun fichier choisi"
+msgstr "No file chosen"
+
+#, fuzzy
+#| msgid "Titre de l'annonce"
+msgid "Titre de l'annonce (Français)"
+msgstr "Ad title"
+
+#, fuzzy
+#| msgid "Titre de l'annonce"
+msgid "Titre de l'annonce (Anglais) - Optionnel"
+msgstr "Ad title"
+
+#, fuzzy
+#| msgid "Description détaillée de l'annonce"
+msgid "Description détaillée de l'annonce (Français)"
+msgstr "Detailed ad description"
+
+#, fuzzy
+#| msgid "Description détaillée de l'annonce"
+msgid "Description détaillée de l'annonce (Anglais) - Optionnel"
+msgstr "Detailed ad description"
+
+msgid "Ville"
+msgstr "City"
+
+msgid "Code postal"
+msgstr ""
+
+msgid "exemple@email.com"
+msgstr "example@email.com"
+
+msgid "Titre (Français)"
+msgstr ""
+
+msgid "Titre (Anglais) - Optionnel"
+msgstr ""
+
+#, fuzzy
+#| msgid "Description"
+msgid "Description (Français)"
+msgstr "Description"
+
+msgid "Description (Anglais) - Optionnel"
+msgstr ""
+
+msgid "Prix (MRU)"
+msgstr "Price (MRU)"
+
+msgid "Catégorie"
+msgstr "Category"
+
+msgid "Type d'annonce"
+msgstr "Ad type"
+
+msgid "Téléphone de contact"
+msgstr "Contact phone"
+
+msgid "Email de contact"
+msgstr "Contact email"
+
+msgid "Urgent"
+msgstr "Urgent"
+
+msgid "Propriétaire"
+msgstr "Owner"
+
+msgid "Date de publication"
+msgstr "Publication date"
+
+msgid "La date sera automatiquement définie si laissée vide"
+msgstr "The date will be automatically set if left empty"
+
+msgid "Disponible"
+msgstr "Available"
+
+msgid "Service"
+msgstr "Service"
+
+msgid "Location"
+msgstr "Rental"
+
+msgid "Autre"
+msgstr "Other"
+
+msgid "Titre (Anglais)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Description"
+msgid "Description (Anglais)"
+msgstr "Description"
+
+msgid "Gratuit"
+msgstr "Free"
+
+msgid "Créer une annonce"
+msgstr "Create an ad"
+
+#, fuzzy
+#| msgid "Créez votre compte AdPlus"
+msgid "Publiez votre annonce sur AdPlus"
+msgstr "Create your AdPlus account"
+
+msgid "Titre"
+msgstr "Title"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Laissez vide si l'annonce est gratuite"
+msgstr "Leave empty if the ad is free"
+
+msgid "Sélectionnez le type d'annonce : Disponible, Service, Location ou Autre"
+msgstr "Select the ad type: Available, Service, Rental or Other"
+
+msgid "Optionnel : Chargez une image pour votre annonce."
+msgstr "Optional: Upload an image for your ad."
+
+msgid "Marquer cette annonce comme urgente"
+msgstr "Mark this ad as urgent"
+
+msgid "Optionnel"
+msgstr ""
+
+msgid "Annuler"
+msgstr "Cancel"
+
+msgid "Créer l'annonce"
+msgstr "Create the ad"
+
+msgid "Tableau de bord Administrateur"
+msgstr "Administrator Dashboard"
+
+msgid "Gérez toutes les annonces de la plateforme"
+msgstr "Manage all platform ads"
+
+msgid "Catégories"
+msgstr "Categories"
+
+msgid "Total Annonces"
+msgstr "Total Ads"
+
+msgid "Validées"
+msgstr "Validated"
+
+msgid "du total"
+msgstr ""
+
+msgid "Rejetées"
+msgstr "Rejected"
+
+msgid "Utilisateurs"
+msgstr "Users"
+
+msgid "Clients"
+msgstr "Clients"
+
+msgid "Admins"
+msgstr "Admins"
+
+msgid "Taux de validation"
+msgstr "Validation Rate"
+
+msgid "Performance"
+msgstr ""
+
+msgid "Filtres et recherche"
+msgstr "Filters and search"
+
+msgid "Recherche"
+msgstr "Search"
+
+msgid "Titre, description, propriétaire..."
+msgstr "Title, description, owner..."
+
+msgid "Tous"
+msgstr "All"
+
+msgid "Toutes"
+msgstr "All"
+
+msgid "Filtrer"
+msgstr "Filter"
+
+msgid "Réinitialiser"
+msgstr "Reset"
+
+msgid "Liste des annonces"
+msgstr "List of ads"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Non spécifié"
+msgstr "Not specified"
+
+msgid "Valider"
+msgstr "Validate"
+
+msgid "Rejeter"
+msgstr "Reject"
+
+msgid "Modifier"
+msgstr "Edit"
+
+msgid "Supprimer"
+msgstr "Delete"
+
+msgid "Confirmer la validation"
+msgstr "Confirm validation"
+
+msgid "Êtes-vous sûr de vouloir valider l'annonce"
+msgstr "Are you sure you want to validate this ad"
+
+#, fuzzy
+#| msgid "Confirmer le mot de passe"
+msgid "Confirmer le rejet"
+msgstr "Confirm rejection"
+
+msgid "Êtes-vous sûr de vouloir rejeter l'annonce"
+msgstr "Are you sure you want to reject this ad"
+
+#, fuzzy
+#| msgid "Confirmer le mot de passe"
+msgid "Confirmer la suppression"
+msgstr "Confirm deletion"
+
+msgid "Êtes-vous sûr de vouloir supprimer l'annonce"
+msgstr "Are you sure you want to delete this ad"
+
+msgid "Cette action est irréversible."
+msgstr "This action is irreversible."
+
+msgid "Pagination des annonces"
+msgstr "Ads pagination"
+
+msgid "Premier"
+msgstr "First"
+
+msgid "Précédent"
+msgstr "Previous"
+
+msgid "Page"
+msgstr "Page"
+
+msgid "sur"
+msgstr "of"
+
+msgid "Suivant"
+msgstr "Next"
+
+msgid "Dernier"
+msgstr "Last"
+
+msgid "Aucune annonce disponible."
+msgstr "No ads available."
+
+msgid "Administration"
+msgstr "Administration"
+
+msgid "Remplissez les informations ci-dessous pour créer une nouvelle annonce"
+msgstr "Fill in the information below to create a new ad"
+
+msgid "Catégorie et image"
+msgstr "Category and Image"
+
+msgid "Propriétaire et statut"
+msgstr "Owner and Status"
+
+msgid "Sélectionnez le statut initial de l'annonce"
+msgstr "Select the initial status of the ad"
+
+msgid "Retour au tableau de bord"
+msgstr "Back to Dashboard"
+
+#, fuzzy
+#| msgid "Créer une annonce"
+msgid "Modifier une annonce"
+msgstr "Edit an ad"
+
+#, fuzzy
+#| msgid "Voir les annonces"
+msgid "Modifier l'annonce"
+msgstr "Edit the ad"
+
+msgid ""
+"Optionnel : Chargez une nouvelle image ou laissez vide pour conserver "
+"l'actuelle."
+msgstr "Optional: Upload a new image or leave empty to keep the current one."
+
+#, fuzzy
+#| msgid "Sélectionnez le statut initial de l'annonce"
+msgid "Sélectionnez le statut de l'annonce"
+msgstr "Select the initial status of the ad"
+
+msgid "Enregistrer les modifications"
+msgstr "Save changes"
+
+msgid "Accueil"
+msgstr "Home"
+
+msgid "Annonces"
+msgstr "Ads"
+
+msgid "Validée"
+msgstr "Validated"
+
+#, fuzzy
+#| msgid "Inscription"
+msgid "Informations"
+msgstr "Information"
+
+#, fuzzy
+#| msgid "Publiez vite"
+msgid "Publié le"
+msgstr "Published on"
+
+msgid "Vues"
+msgstr "Views"
+
+msgid "Téléphone"
+msgstr "Phone"
+
+msgid "Retour à la liste"
+msgstr "Back to list"
+
+msgid "Annonces similaires"
+msgstr "Similar ads"
+
+msgid "Voir"
+msgstr "View"
+
+msgid "Annonces disponibles"
+msgstr "Available Ads"
+
+msgid ""
+"Découvrez toutes nos annonces vérifiées et trouvez exactement ce que vous "
+"cherchez"
+msgstr "Discover all our verified ads and find exactly what you're looking for"
+
+msgid "Plateforme de publication et de gestion d'annonces"
+msgstr "Ad publishing and management platform"
+
+msgid "Publier une annonce"
+msgstr "Publish an ad"
+
+msgid "Recherche et filtres"
+msgstr "Search and filters"
+
+msgid "Filtres avancés"
+msgstr "Advanced filters"
+
+msgid "Titre, description, ville..."
+msgstr "Title, description, city..."
+
+msgid "Prix min (MRU)"
+msgstr "Min price (MRU)"
+
+msgid "Prix max (MRU)"
+msgstr "Max price (MRU)"
+
+msgid "Trier par"
+msgstr "Sort by"
+
+msgid "Plus récent"
+msgstr "Most recent"
+
+msgid "Plus ancien"
+msgstr "Oldest"
+
+msgid "Prix croissant"
+msgstr "Price ascending"
+
+msgid "Prix décroissant"
+msgstr "Price descending"
+
+msgid "Rechercher"
+msgstr "Search"
+
+#, fuzzy
+#| msgid "Voir les annonces"
+msgid "Voir les détails"
+msgstr "View details"
+
+msgid "Aucune annonce trouvée"
+msgstr "No ads found"
+
+msgid "Aucune annonce ne correspond à votre recherche."
+msgstr "No ads match your search."
+
+msgid "Voir toutes les annonces"
+msgstr "View all ads"
+
+msgid ""
+"Cette application fait partie de mon portfolio et a été conçue pour "
+"démontrer mes compétences en développement web et backend."
+msgstr ""
+"This application is part of my portfolio and was designed to demonstrate my "
+"web and backend development skills."
+
+msgid "Tous droits réservés."
+msgstr "All rights reserved."
+
+msgid "Mes annonces"
+msgstr "My Ads"
+
+msgid "Gérez toutes vos annonces"
+msgstr "Manage all your ads"
+
+msgid "Filtrer par statut"
+msgstr "Filter by status"
+
+msgid "Fermer"
+msgstr "Close"
+
+msgid "Aucune annonce"
+msgstr "No ads"
+
+msgid "Vous n'avez aucune annonce pour le moment."
+msgstr "You don't have any ads at the moment."
+
+msgid "Créer votre première annonce"
+msgstr "Create your first ad"
+
+msgid "Titre de l'annonce"
+msgstr "Ad title"
+
+msgid "Portfolio"
+msgstr "Portfolio"
+
+msgid "À propos"
+msgstr "About"
+
+msgid "Services"
+msgstr "Services"
+
+msgid "Compétences"
+msgstr "Skills"
+
+msgid "Projets"
+msgstr "Projects"
+
+msgid "Changer de thème"
+msgstr "Change theme"
+
+msgid "Salut ! Je suis"
+msgstr "Hi! I am"
+
+msgid "Développeuse Web"
+msgstr "Web Developer"
+
+msgid ""
+"Je suis une Développeuse Web / Backend avec une expérience approfondie. Mon "
+"expertise réside dans la création et le développement d'applications web "
+"fonctionnelles et bien structurées pour résoudre des besoins concrets."
+msgstr ""
+"I am a Web / Backend Developer with extensive experience. My expertise lies "
+"in creating and developing functional and well-structured web applications "
+"to solve concrete needs."
+
+msgid "En savoir plus"
+msgstr "Learn More"
+
+msgid "Me contacter"
+msgstr "Contact Me"
+
+msgid ""
+"Cette application d'annonces a été conçue pour permettre aux utilisateurs de "
+"publier et gérer facilement leurs annonces, tout en mettant en pratique mes "
+"compétences en développement web backend. L'objectif est de créer une "
+"plateforme intuitive où les utilisateurs peuvent créer, modifier et "
+"supprimer leurs annonces, avec un système de validation par les "
+"administrateurs pour garantir la qualité du contenu."
+msgstr ""
+"This ads application was designed to allow users to easily publish and "
+"manage their ads, while putting into practice my web backend development "
+"skills. The goal is to create an intuitive platform where users can create, "
+"modify and delete their ads, with a validation system by administrators to "
+"ensure content quality."
+
+msgid "Développement Web"
+msgstr "Web Development"
+
+msgid ""
+"Création d'applications web modernes et performantes avec les dernières "
+"technologies. Je développe des solutions web sur mesure qui répondent à vos "
+"besoins spécifiques et offrent une expérience utilisateur optimale."
+msgstr ""
+"Creating modern and performant web applications with the latest "
+"technologies. I develop custom web solutions that meet your specific needs "
+"and provide an optimal user experience."
+
+msgid "Développement Backend"
+msgstr "Backend Development"
+
+msgid ""
+"Architecture backend robuste et scalable pour vos applications. Je conçois "
+"et développe des systèmes backend performants, sécurisés et maintenables qui "
+"garantissent la stabilité et la performance de vos projets."
+msgstr ""
+"Robust and scalable backend architecture for your applications. I design and "
+"develop performant, secure and maintainable backend systems that ensure the "
+"stability and performance of your projects."
+
+msgid "Gestion de Base de Données"
+msgstr "Database Management"
+
+msgid ""
+"Conception et optimisation de bases de données pour garantir des "
+"performances optimales. Je crée des schémas de données efficaces et mets en "
+"place des stratégies d'optimisation pour améliorer les temps de réponse."
+msgstr ""
+"Database design and optimization to ensure optimal performance. I create "
+"efficient data schemas and implement optimization strategies to improve "
+"response times."
+
+msgid "Conception CRUD"
+msgstr "CRUD Design"
+
+msgid ""
+"Application CRUD complète avec gestion des opérations de base de données"
+msgstr "Complete CRUD application with database operations management"
+
+msgid "Architecture Backend"
+msgstr "Backend Architecture"
+
+msgid "Organisation logique et structurée du backend"
+msgstr "Logical and structured backend organization"
+
+msgid "Sécurité"
+msgstr "Security"
+
+msgid "Gestion des utilisateurs, permissions et validation"
+msgstr "User management, permissions and validation"
+
+msgid "Structuration"
+msgstr "Structuring"
+
+msgid "Structuration d'un projet de bout en bout"
+msgstr "End-to-end project structuring"
+
+msgid "Internationalisation"
+msgstr "Internationalization"
+
+msgid "Support multilingue avec système de traduction"
+msgstr "Multilingual support with translation system"
+
+msgid "Interface Responsive"
+msgstr "Responsive Interface"
+
+msgid "Design adaptatif et moderne pour tous les appareils"
+msgstr "Adaptive and modern design for all devices"
+
+msgid "Application d'Annonces"
+msgstr "Ads Application"
+
+msgid "Plateforme complète de gestion d'annonces avec système de validation"
+msgstr "Complete ads management platform with validation system"
+
+msgid "Cliquez ci-dessous pour accéder à l'application complète."
+msgstr "Click below to access the full application."
+
+msgid "Voir le projet"
+msgstr "View project"
+
+msgid "App-To-Do"
+msgstr "App-To-Do"
+
+msgid ""
+"Application de gestion de tâches moderne et intuitive développée avec React. "
+"Gestion complète des tâches (CRUD), filtres avancés et tableau de bord avec "
+"statistiques."
+msgstr ""
+"Modern and intuitive task management application developed with React. "
+"Complete task management (CRUD), advanced filters and dashboard with "
+"statistics."
+
+msgid "Voir l'application"
+msgstr "View Application"
+
+msgid "GitHub"
+msgstr "GitHub"
+
+msgid ""
+"Application de gestion de rendez-vous et planification développée avec "
+"Django. Système complet de prise de rendez-vous avec gestion des "
+"utilisateurs et des disponibilités."
+msgstr ""
+"Appointment and scheduling management application developed with Django. "
+"Complete appointment booking system with user and availability management."
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Entrer dans l'application"
+msgstr "Enter the application"
+
+msgid "Ba Diarietou"
+msgstr ""
+
+msgid ""
+"Développeuse Web / Backend passionnée par la création d'applications web "
+"modernes et performantes."
+msgstr ""
+"Web / Backend Developer passionate about creating modern and performant web "
+"applications."
+
+msgid "Navigation"
+msgstr "Navigation"
+
+msgid "Open Ads Application"
+msgstr "Open Ads Application"
+
+msgid "Entrez votre nom d'utilisateur"
+msgstr "Enter your username"
+
+msgid "+222 12 34 56 78"
+msgstr "+222 12 34 56 78"
+
+msgid "Minimum 8 caractères"
+msgstr "Minimum 8 characters"
+
+#, fuzzy
+#| msgid "Confirmer le mot de passe"
+msgid "Confirmez votre mot de passe"
+msgstr "Confirm password"
+
+msgid "Nom d'utilisateur"
+msgstr "Username"
+
+#, fuzzy
+#| msgid "Confirmer le mot de passe"
+msgid "Entrez votre mot de passe"
+msgstr "Enter your password"
+
+msgid "Mot de passe"
+msgstr "Password"
+
+msgid "Connexion"
+msgstr "Login"
+
+msgid "Inscription"
+msgstr "Sign Up"
+
+msgid "Déconnexion"
+msgstr "Logout"
+
+msgid "Connectez-vous à votre compte AdPlus"
+msgstr "Sign in to your AdPlus account"
+
+msgid "Se connecter"
+msgstr "Sign in"
+
+msgid "Pas encore de compte ?"
+msgstr "Don't have an account yet?"
+
+msgid "S'inscrire"
+msgstr "Sign up"
+
+msgid "Créez votre compte AdPlus"
+msgstr "Create your AdPlus account"
+
+msgid "Adresse électronique"
+msgstr "Email address"
+
+msgid "Le mot de passe doit contenir au moins 8 caractères."
+msgstr "Password must contain at least 8 characters."
+
+msgid "Confirmer le mot de passe"
+msgstr "Confirm password"
+
+msgid "Entrez le même mot de passe pour confirmation."
+msgstr "Enter the same password for confirmation."
+
+msgid "Déjà un compte ?"
+msgstr "Already have an account?"
+
+# Traductions pour l'interface admin
+msgid "Administration AdPlus"
+msgstr "AdPlus Administration"
+
+msgid "AdPlus Admin"
+msgstr "AdPlus Admin"
+
+msgid "Panneau d'administration"
+msgstr "Administration Panel"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Mes Annonces"
+msgstr "My Ads"
+
+msgid "Créer"
+msgstr "Create"
+
+msgid "Explorer"
+msgstr "Explore"
+
+msgid "Changer la langue"
+msgstr "Change language"
+
+msgid "Français"
+msgstr ""
+
+msgid "English"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Site Maps"
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistiques"
+msgid "Static Files"
+msgstr "Statistics"
+
+#, fuzzy
+#| msgid "Location"
+msgid "Syndication"
+msgstr "Rental"
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+msgid "…"
+msgstr ""
+
+msgid "That page number is not an integer"
+msgstr ""
+
+msgid "That page number is less than 1"
+msgstr ""
+
+msgid "That page contains no results"
+msgstr ""
+
+msgid "Enter a valid value."
+msgstr ""
+
+msgid "Enter a valid domain name."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#, python-format
+msgid "Enter a valid %(protocol)s address."
+msgstr ""
+
+msgid "IPv4"
+msgstr ""
+
+msgid "IPv6"
+msgstr ""
+
+msgid "IPv4 or IPv6"
+msgstr ""
+
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr ""
+
+#, python-format
+msgid ""
+"Ensure this value is a multiple of step size %(limit_value)s, starting from "
+"%(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on."
+msgstr ""
+
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Enter a number."
+msgstr ""
+
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+msgid "Null characters are not allowed."
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr ""
+
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+msgid "This field cannot be null."
+msgstr ""
+
+msgid "This field cannot be blank."
+msgstr ""
+
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+msgid "String (unlimited)"
+msgstr ""
+
+msgid "Comma-separated integers"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+msgid "Date (without time)"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+msgid "Date (with time)"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+msgid "Decimal number"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] "
+"[[HH:]MM:]ss[.uuuuuu] format."
+msgstr ""
+
+#, fuzzy
+#| msgid "Décoration"
+msgid "Duration"
+msgstr "Decoration"
+
+msgid "Email address"
+msgstr ""
+
+msgid "File path"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
+
+msgid "Floating point number"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+msgid "Integer"
+msgstr ""
+
+msgid "Big (8 byte) integer"
+msgstr ""
+
+msgid "Small integer"
+msgstr ""
+
+msgid "IPv4 address"
+msgstr ""
+
+msgid "IP address"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+msgid "Positive big integer"
+msgstr ""
+
+msgid "Positive integer"
+msgstr ""
+
+msgid "Positive small integer"
+msgstr ""
+
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Raw binary data"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+msgid "Universally unique identifier"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "A JSON object"
+msgstr ""
+
+msgid "Value must be valid JSON."
+msgstr ""
+
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+msgid "One-to-one relationship"
+msgstr ""
+
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+msgid ":?.!"
+msgstr ""
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Enter a whole number."
+msgstr ""
+
+#, fuzzy
+#| msgid "Confirmer la validation"
+msgid "Enter a valid date."
+msgstr "Confirm validation"
+
+#, fuzzy
+#| msgid "Confirmer la validation"
+msgid "Enter a valid time."
+msgstr "Confirm validation"
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+#, fuzzy
+#| msgid "Confirmer la validation"
+msgid "Enter a valid duration."
+msgstr "Confirm validation"
+
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+msgid "No file was submitted."
+msgstr ""
+
+msgid "The submitted file is empty."
+msgstr ""
+
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+msgid "Enter a list of values."
+msgstr ""
+
+msgid "Enter a complete value."
+msgstr ""
+
+msgid "Enter a valid UUID."
+msgstr ""
+
+msgid "Enter a valid JSON."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+msgid ":"
+msgstr ""
+
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Order"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "Currently"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+#. Translators: Please do not add spaces around commas.
+msgid "yes,no,maybe"
+msgstr ""
+
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+msgid "p.m."
+msgstr ""
+
+msgid "a.m."
+msgstr ""
+
+msgid "PM"
+msgstr ""
+
+msgid "AM"
+msgstr ""
+
+msgid "midnight"
+msgstr ""
+
+msgid "noon"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Friday"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Mon"
+msgstr ""
+
+#, fuzzy
+#| msgid "Toutes"
+msgid "Tue"
+msgstr "All"
+
+msgid "Wed"
+msgstr ""
+
+msgid "Thu"
+msgstr ""
+
+msgid "Fri"
+msgstr ""
+
+#, fuzzy
+#| msgid "Statut"
+msgid "Sat"
+msgstr "Status"
+
+#, fuzzy
+#| msgid "Suivant"
+msgid "Sun"
+msgstr "Next"
+
+msgid "January"
+msgstr ""
+
+msgid "February"
+msgstr ""
+
+msgid "March"
+msgstr ""
+
+msgid "April"
+msgstr ""
+
+msgid "May"
+msgstr ""
+
+msgid "June"
+msgstr ""
+
+msgid "July"
+msgstr ""
+
+msgid "August"
+msgstr ""
+
+msgid "September"
+msgstr ""
+
+msgid "October"
+msgstr ""
+
+msgid "November"
+msgstr ""
+
+msgid "December"
+msgstr ""
+
+msgid "jan"
+msgstr ""
+
+msgid "feb"
+msgstr ""
+
+msgid "mar"
+msgstr ""
+
+msgid "apr"
+msgstr ""
+
+msgid "may"
+msgstr ""
+
+msgid "jun"
+msgstr ""
+
+msgid "jul"
+msgstr ""
+
+msgid "aug"
+msgstr ""
+
+msgid "sep"
+msgstr ""
+
+#, fuzzy
+#| msgid "Contact"
+msgid "oct"
+msgstr "Contact"
+
+msgid "nov"
+msgstr ""
+
+msgid "dec"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "September"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "November"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "December"
+msgstr ""
+
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+#, fuzzy
+#| msgid "Voir"
+msgid "or"
+msgstr "View"
+
+#. Translators: This string is used as a separator between list elements
+msgid ", "
+msgstr ""
+
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Forbidden"
+msgstr ""
+
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+msgid "No year specified"
+msgstr ""
+
+msgid "Date out of range"
+msgstr ""
+
+#, fuzzy
+#| msgid "Non spécifié"
+msgid "No month specified"
+msgstr "Not specified"
+
+#, fuzzy
+#| msgid "Non spécifié"
+msgid "No day specified"
+msgstr "Not specified"
+
+msgid "No week specified"
+msgstr ""
+
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
+msgstr ""
+
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr ""
+
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr ""
+
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
+msgstr ""
+
+msgid "Django Documentation"
+msgstr ""
+
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+msgid "Get started with Django"
+msgstr ""
+
+msgid "Django Community"
+msgstr ""
+
+msgid "Connect, get help, or contribute"
+msgstr ""
+
+msgid "close"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Annonces similaires"
+#~ msgid "Annonces par statut"
+#~ msgstr "Similar ads"
+
+#, fuzzy
+#~| msgid "Annonces similaires"
+#~ msgid "Annonces par type"
+#~ msgstr "Similar ads"
+
+#, fuzzy
+#~| msgid "Catégories"
+#~ msgid "Top catégories"
+#~ msgstr "Categories"
+
+#, fuzzy
+#~| msgid "Nombre d'annonces"
+#~ msgid "Nombre d\\'annonces"
+#~ msgstr "Number of ads"
+
+#, fuzzy
+#~| msgid "Annonces disponibles"
+#~ msgid "Annonces publiées"
+#~ msgstr "Available Ads"
+
+#~ msgid "Toutes les annonces"
+#~ msgstr "All ads"
+
+#~ msgid ""
+#~ "Optionnel : Chargez une image pour votre annonce (JPG, PNG, max 5MB)."
+#~ msgstr "Optional: Upload an image for your ad (JPG, PNG, max 5MB)."
+
+#~ msgid "Tableau de bord"
+#~ msgstr "Dashboard"
+
+#~ msgid "Découvrez toutes nos annonces disponibles"
+#~ msgstr "Discover all our available ads"
+
+#~ msgid "Aucune annonce ne correspond à vos critères de recherche."
+#~ msgstr "No ads match your search criteria."
+
+#~ msgid "La plateforme d'annonces moderne pour publier et vendre rapidement."
+#~ msgstr "The modern ad platform to publish and sell quickly."
+
+#~ msgid "À propos de nous"
+#~ msgstr "About us"
+
+#~ msgid "Conditions d'utilisation"
+#~ msgstr "Terms of use"
+
+#~ msgid "Suivez-nous"
+#~ msgstr "Follow us"
+
+#~ msgid "Publiez vite,"
+#~ msgstr "Publish fast,"
+
+#~ msgid "vendez rapidement."
+#~ msgstr "sell quickly."
+
+#~ msgid ""
+#~ "Transformez vos objets en opportunités. AdPlus vous connecte avec des "
+#~ "milliers d'acheteurs et simplifie chaque étape de votre vente, de la "
+#~ "publication à la transaction."
+#~ msgstr ""
+#~ "Transform your items into opportunities. AdPlus connects you with "
+#~ "thousands of buyers and simplifies every step of your sale, from "
+#~ "publishing to transaction."
+
+#~ msgid "Voir les annonces"
+#~ msgstr "View ads"
+
+#~ msgid "Commencer"
+#~ msgstr "Get Started"
+
+#~ msgid "La plateforme d'annonces qui pourrait changer votre façon de vendre."
+#~ msgstr "The ad platform that could change the way you sell."
+
+#~ msgid "Publiez vite"
+#~ msgstr "Publish fast"
+
+#~ msgid "Vendez rapidement"
+#~ msgstr "Sell quickly"
+
+#~ msgid "Sécurisé"
+#~ msgstr "Secure"
+
+#~ msgid "Statut de vente"
+#~ msgstr "Sale status"
+
+#~ msgid "Vendu"
+#~ msgstr "Sold"
+
+#~ msgid "Entrer dans l'application d'annonces"
+#~ msgstr "Enter the ads application"
+
+#~ msgid "Home"
+#~ msgstr "Home"
+
+#~ msgid "About Us"
+#~ msgstr "About Us"
+
+#~ msgid "Skills"
+#~ msgstr "Skills"
+
+#~ msgid "Work"
+#~ msgstr "Work"
+
+#~ msgid "Hey! I am"
+#~ msgstr "Hey! I am"
+
+#~ msgid "Web Developer"
+#~ msgstr "Web Developer"
+
+#~ msgid "Learn More"
+#~ msgstr "Learn More"
+
+#~ msgid "Hire Me"
+#~ msgstr "Hire Me"
+
+#~ msgid "Création d'applications web modernes et performantes"
+#~ msgstr "Creating modern and performant web applications"
+
+#~ msgid "Architecture backend robuste et scalable"
+#~ msgstr "Robust and scalable backend architecture"
+
+#~ msgid "Conception et optimisation de bases de données"
+#~ msgstr "Database design and optimization"
+
+#~ msgid "Disponible pour un stage, une opportunité ou une collaboration."
+#~ msgstr "Available for an internship, opportunity or collaboration."
+
+# Translations for categories
+#~ msgid "Immobilier"
+#~ msgstr "Real Estate"
+
+#~ msgid "Mode"
+#~ msgstr "Fashion"
+
+#~ msgid "Véhicules"
+#~ msgstr "Vehicles"
+
+#~ msgid "Électronique"
+#~ msgstr "Electronics"
+
+#~ msgid "Formation"
+#~ msgstr "Training"
+
+#~ msgid "Maison & Jardin"
+#~ msgstr "Home & Garden"
+
+#~ msgid "Sport & Loisirs"
+#~ msgstr "Sports & Leisure"
+
+#~ msgid "Emploi"
+#~ msgstr "Jobs"
+
+#~ msgid "Animaux"
+#~ msgstr "Animals"
+
+#~ msgid "Multimédia"
+#~ msgstr "Multimedia"
+
+#~ msgid "Informatique"
+#~ msgstr "IT & Computing"
+
+#~ msgid "Téléphonie"
+#~ msgstr "Phones"
+
+#~ msgid "Meubles"
+#~ msgstr "Furniture"
+
+#~ msgid "Jardinage"
+#~ msgstr "Gardening"
+
+#~ msgid "Bricolage"
+#~ msgstr "DIY"
+
+#~ msgid "Vêtements"
+#~ msgstr "Clothing"
+
+#~ msgid "Chaussures"
+#~ msgstr "Shoes"
+
+#~ msgid "Accessoires"
+#~ msgstr "Accessories"
+
+#~ msgid "Beauté"
+#~ msgstr "Beauty"
+
+#~ msgid "Santé"
+#~ msgstr "Health"
+
+#~ msgid "Livres"
+#~ msgstr "Books"
+
+#~ msgid "Musique"
+#~ msgstr "Music"
+
+#~ msgid "Jeux"
+#~ msgstr "Games"
+
+#~ msgid "Jouets"
+#~ msgstr "Toys"
+
+#~ msgid "Bébé"
+#~ msgstr "Baby"

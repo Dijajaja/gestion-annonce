@@ -1,34 +1,234 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Modifier une catégorie{% endblock %}
+{% block title %}{% trans "Modifier une catégorie" %} - AdPlus{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Modifier la catégorie : {{ categorie.nom }}</h2>
-    
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-3" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
-    
-    <div class="card-body">
-        <form method="post" class="needs-validation" novalidate>
-            {% csrf_token %}
-            
-            <div class="mb-3">
-                <label for="{{ form.nom.id_for_label }}" class="form-label">Nom</label>
-                {{ form.nom }}
-                {% if form.nom.errors %}
-                    <div class="invalid-feedback">{{ form.nom.errors }}</div>
-                {% endif %}
-            </div>
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-edit fa-2x me-3"></i>
+                        <div>
+                            <h4 class="mb-0">{% trans "Modifier la catégorie" %}</h4>
+                            <small class="opacity-75">{{ categorie.nom }}</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+                                {% if message.tags == 'success' %}
+                                    <i class="fas fa-check-circle me-2"></i>
+                                {% else %}
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                {% endif %}
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                    
+                    <form method="post" class="needs-validation" novalidate id="categorieForm">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.nom.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fas fa-tag me-2 text-primary"></i> {% trans "Nom de la catégorie" %} <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="fas fa-tag text-muted"></i>
+                                </span>
+                                {{ form.nom }}
+                            </div>
+                            {% if form.nom.errors %}
+                                <div class="text-danger small mt-2">
+                                    <i class="fas fa-exclamation-circle"></i> {{ form.nom.errors.0 }}
+                                </div>
+                            {% elif form.nom.help_text %}
+                                <div class="form-text mt-1">
+                                    <i class="fas fa-info-circle"></i> {{ form.nom.help_text }}
+                                </div>
+                            {% endif %}
+                        </div>
 
-            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-        </form>
+                        <div class="mb-4">
+                            <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fas fa-align-left me-2 text-primary"></i> {% trans "Description" %} <span class="text-muted small">({% trans "optionnel" %})</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 align-items-start pt-2">
+                                    <i class="fas fa-align-left text-muted"></i>
+                                </span>
+                                {{ form.description }}
+                            </div>
+                            {% if form.description.errors %}
+                                <div class="text-danger small mt-2">
+                                    <i class="fas fa-exclamation-circle"></i> {{ form.description.errors.0 }}
+                                </div>
+                            {% elif form.description.help_text %}
+                                <div class="form-text mt-1">
+                                    <i class="fas fa-info-circle"></i> {{ form.description.help_text }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="{{ form.icone.id_for_label }}" class="form-label fw-semibold">
+                                <i class="fas fa-icons me-2 text-primary"></i> {% trans "Icône Font Awesome" %} <span class="text-muted small">({% trans "optionnel" %})</span>
+                            </label>
+                            <div class="row g-2">
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="fas fa-icons text-muted"></i>
+                                        </span>
+                                        {{ form.icone }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            {% trans "Aperçu" %}:
+                                        </span>
+                                        <span class="input-group-text bg-white" id="iconPreview">
+                                            {% if categorie.icone %}
+                                                <i class="{{ categorie.icone }} text-primary fa-lg"></i>
+                                            {% else %}
+                                                <i class="fas fa-question-circle text-muted"></i>
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if form.icone.errors %}
+                                <div class="text-danger small mt-2">
+                                    <i class="fas fa-exclamation-circle"></i> {{ form.icone.errors.0 }}
+                                </div>
+                            {% elif form.icone.help_text %}
+                                <div class="form-text mt-1">
+                                    <i class="fas fa-info-circle"></i> {{ form.icone.help_text }}
+                                </div>
+                            {% endif %}
+                            <div class="mt-2">
+                                <small class="text-muted">
+                                    <strong>{% trans "Exemples populaires" %}:</strong>
+                                    <span class="badge bg-secondary me-1 cursor-pointer" onclick="setIcon('home')">fa-home</span>
+                                    <span class="badge bg-secondary me-1 cursor-pointer" onclick="setIcon('car')">fa-car</span>
+                                    <span class="badge bg-secondary me-1 cursor-pointer" onclick="setIcon('laptop')">fa-laptop</span>
+                                    <span class="badge bg-secondary me-1 cursor-pointer" onclick="setIcon('mobile-alt')">fa-mobile-alt</span>
+                                    <span class="badge bg-secondary me-1 cursor-pointer" onclick="setIcon('tshirt')">fa-tshirt</span>
+                                    <span class="badge bg-secondary me-1 cursor-pointer" onclick="setIcon('tools')">fa-tools</span>
+                                    <span class="badge bg-secondary me-1 cursor-pointer" onclick="setIcon('book')">fa-book</span>
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end pt-3 border-top">
+                            <a href="{% url 'liste_categories' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i> {% trans "Retour" %}
+                            </a>
+                            <button type="submit" class="btn btn-primary shadow-sm">
+                                <i class="fas fa-save me-2"></i> {% trans "Enregistrer les modifications" %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+.cursor-pointer {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.cursor-pointer:hover {
+    transform: scale(1.1);
+}
+</style>
+
+<script>
+// Aperçu de l'icône en temps réel
+document.addEventListener('DOMContentLoaded', function() {
+    const iconInput = document.getElementById('id_categorie_icone');
+    const iconPreview = document.getElementById('iconPreview');
+    
+    if (iconInput && iconPreview) {
+        function updatePreview() {
+            let iconValue = iconInput.value.trim();
+            if (iconValue) {
+                // Nettoyer la valeur
+                if (iconValue.startsWith('fa-')) {
+                    // Déjà au bon format
+                } else if (iconValue.startsWith('fas fa-') || iconValue.startsWith('far fa-') || iconValue.startsWith('fab fa-')) {
+                    iconValue = iconValue.replace(/^(fas|far|fab) fa-/, 'fa-');
+                } else {
+                    iconValue = 'fa-' + iconValue;
+                }
+                
+                iconPreview.innerHTML = '<i class="' + iconValue + ' text-primary fa-lg"></i>';
+            } else {
+                {% if categorie.icone %}
+                    iconPreview.innerHTML = '<i class="{{ categorie.icone }} text-primary fa-lg"></i>';
+                {% else %}
+                    iconPreview.innerHTML = '<i class="fas fa-question-circle text-muted"></i>';
+                {% endif %}
+            }
+        }
+        
+        iconInput.addEventListener('input', updatePreview);
+        iconInput.addEventListener('blur', function() {
+            // Normaliser la valeur
+            let iconValue = iconInput.value.trim();
+            if (iconValue && !iconValue.startsWith('fa-')) {
+                if (!iconValue.startsWith('fas fa-') && !iconValue.startsWith('far fa-') && !iconValue.startsWith('fab fa-')) {
+                    iconInput.value = 'fa-' + iconValue;
+                }
+            }
+            updatePreview();
+        });
+        
+        updatePreview(); // Initial preview
+    }
+});
+
+function setIcon(iconName) {
+    const iconInput = document.getElementById('id_categorie_icone');
+    if (iconInput) {
+        iconInput.value = 'fa-' + iconName;
+        iconInput.dispatchEvent(new Event('input'));
+    }
+}
+
+// Validation HTML5
+(function() {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
 {% endblock %}

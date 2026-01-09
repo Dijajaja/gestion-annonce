@@ -1,0 +1,1625 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block title %}Ba Diarietou - {% trans "Portfolio" %}{% endblock %}
+
+{% block extra_head %}
+<link rel="icon" type="image/jpeg" href="{% static 'images/photo-profil.jpg' %}">
+<link rel="shortcut icon" type="image/jpeg" href="{% static 'images/photo-profil.jpg' %}">
+<link rel="apple-touch-icon" href="{% static 'images/photo-profil.jpg' %}">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --portfolio-primary: var(--primary-blue);
+        --portfolio-primary-dark: #1e3a8a;
+        --portfolio-light: #f0fdfa;
+        --portfolio-gradient-start: #1e3a8a;
+        --portfolio-gradient-end: #6366f1;
+        --photo-border: #ffffff;
+        --photo-shadow: rgba(30, 58, 138, 0.3);
+        
+        /* Thème clair (par défaut) */
+        --theme-bg: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+        --theme-nav-bg: rgba(30, 58, 138, 0.95);
+        --theme-section-bg: rgba(255, 255, 255, 0.95);
+        --theme-text-primary: var(--text-white);
+        --theme-text-secondary: var(--text-dark);
+        --theme-text-muted: var(--text-gray);
+        --theme-card-bg: var(--bg-white);
+        --theme-shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    [data-theme="dark"] {
+        /* Thème sombre */
+        --theme-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        --theme-nav-bg: rgba(15, 23, 42, 0.98);
+        --theme-section-bg: rgba(30, 41, 59, 0.95);
+        --theme-text-primary: #f1f5f9;
+        --theme-text-secondary: #e2e8f0;
+        --theme-text-muted: #94a3b8;
+        --theme-card-bg: rgba(51, 65, 85, 0.8);
+        --theme-shadow: rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+        background: var(--theme-bg);
+        min-height: 100vh;
+        position: relative;
+        transition: background 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+    
+    body > .content {
+        flex: 1;
+    }
+    
+    /* S'assurer que le footer est visible */
+    footer.portfolio-footer {
+        margin-top: auto;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(30, 58, 138, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    body > * {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .portfolio-footer {
+        z-index: 1000 !important;
+        position: relative !important;
+    }
+    
+    /* S'assurer que le footer n'est pas masqué */
+    footer.portfolio-footer {
+        z-index: 1000 !important;
+        position: relative !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: auto !important;
+        min-height: auto !important;
+    }
+
+    /* Navigation moderne */
+    .portfolio-nav {
+        background: var(--theme-nav-bg);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px var(--theme-shadow);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    /* Toggle thème */
+    .theme-toggle {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: var(--text-white);
+        border-radius: 50px;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.2rem;
+    }
+    
+    .theme-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+    }
+    
+    [data-theme="dark"] .theme-toggle {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Sélecteur de langue - Forme ronde */
+    .language-selector {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: var(--text-white) !important;
+        border-radius: 50px !important;
+        padding: 0.5rem 1rem !important;
+        font-size: 0.9rem !important;
+        font-weight: 500 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        outline: none !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        width: auto !important;
+        min-width: 80px !important;
+        text-align: center !important;
+    }
+    
+    .language-selector:hover {
+        background: rgba(255, 255, 255, 0.3) !important;
+        transform: scale(1.05);
+    }
+    
+    .language-selector:focus {
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    [data-theme="dark"] .language-selector {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    [data-theme="dark"] .language-selector:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    /* Style pour les options du select */
+    .language-selector option {
+        background: var(--primary-blue) !important;
+        color: var(--text-white) !important;
+        padding: 0.5rem !important;
+    }
+
+    .portfolio-nav .navbar-brand {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text-white);
+        letter-spacing: 1px;
+    }
+
+    .portfolio-nav .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        margin: 0 0.5rem;
+        transition: color 0.3s;
+        position: relative;
+    }
+
+    .portfolio-nav .nav-link:hover {
+        color: var(--text-white);
+    }
+
+    .portfolio-nav .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--text-white);
+        transition: width 0.3s;
+    }
+
+    .portfolio-nav .nav-link:hover::after {
+        width: 100%;
+    }
+
+    /* Bouton flottant - Forme ronde */
+    .floating-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+        color: var(--text-white);
+        border: none;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 8px 25px rgba(30, 58, 138, 0.4);
+        z-index: 1000;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.25rem;
+        text-decoration: none;
+        padding: 0;
+    }
+    
+    .floating-btn:hover {
+        transform: translateY(-5px) scale(1.1);
+        box-shadow: 0 12px 35px rgba(30, 58, 138, 0.6);
+        color: var(--text-white);
+    }
+    
+    .floating-btn i {
+        font-size: 1.5rem;
+    }
+    
+    .floating-btn span {
+        font-size: 0.7rem;
+        line-height: 1;
+        text-align: center;
+        padding: 0 5px;
+    }
+    
+    [data-theme="dark"] .floating-btn {
+        background: linear-gradient(135deg, var(--gradient-purple-start) 0%, var(--gradient-purple-end) 100%);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+    }
+    
+    [data-theme="dark"] .floating-btn:hover {
+        box-shadow: 0 12px 35px rgba(99, 102, 241, 0.7);
+    }
+    
+    @media (max-width: 768px) {
+        .floating-btn {
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .floating-btn i {
+            font-size: 1.3rem;
+        }
+        
+        .floating-btn span {
+            display: none;
+        }
+    }
+
+    /* Hero Section */
+    .portfolio-hero {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        padding: 4rem 0;
+        position: relative;
+        overflow: hidden;
+        background: transparent;
+    }
+
+    .hero-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.1;
+        z-index: 0;
+    }
+
+    .hero-shape {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-shape-1 {
+        width: 300px;
+        height: 300px;
+        top: -100px;
+        right: 10%;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-shape-2 {
+        width: 200px;
+        height: 200px;
+        bottom: -50px;
+        left: 5%;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .hero-shape-3 {
+        width: 150px;
+        height: 150px;
+        top: 50%;
+        right: 5%;
+        animation: float 7s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-text h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        color: var(--theme-text-primary);
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+        animation: fadeInUp 0.8s ease;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        transition: color 0.3s ease;
+    }
+
+    .hero-text h1 .highlight {
+        color: var(--theme-text-primary);
+        display: block;
+        font-size: 4.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .hero-text p {
+        font-size: 1.2rem;
+        color: var(--theme-text-primary);
+        opacity: 0.95;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        animation: fadeInUp 1s ease;
+        transition: color 0.3s ease;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        animation: fadeInUp 1.2s ease;
+    }
+
+    .btn-hero {
+        padding: 1rem 2.5rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-learn-more {
+        background: var(--text-white);
+        color: var(--primary-blue);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-learn-more:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        color: var(--primary-blue);
+    }
+
+    .btn-hire-me {
+        background: transparent;
+        color: var(--theme-text-primary);
+        border: 2px solid var(--theme-text-primary);
+        box-shadow: 0 4px 15px var(--theme-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .btn-hire-me:hover {
+        background: var(--theme-text-primary);
+        color: var(--primary-blue);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px var(--theme-shadow);
+    }
+    
+    [data-theme="dark"] .btn-hire-me:hover {
+        color: var(--theme-text-secondary);
+    }
+
+    /* Photo avec cercles concentriques - Design harmonisé */
+    .hero-image-wrapper {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: fadeInRight 1s ease;
+        min-height: 500px;
+        padding: 2rem;
+    }
+
+    .photo-container {
+        position: relative;
+        width: 530px;
+        height: 530px;
+        margin: 0 auto;
+    }
+
+    .photo-circle {
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform-origin: center center;
+    }
+
+    .photo-circle-1 {
+        width: 390px;
+        height: 390px;
+        border: 5px solid rgba(255, 255, 255, 0.5);
+        opacity: 0.5;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+    }
+
+    .photo-circle-2 {
+        width: 460px;
+        height: 460px;
+        border: 3px dashed rgba(255, 255, 255, 0.4);
+        opacity: 0.4;
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+        transform: translate(-50%, -50%);
+        animation: rotateCircle2 20s linear infinite;
+    }
+
+    .photo-circle-3 {
+        width: 530px;
+        height: 530px;
+        border: 2px dotted rgba(255, 255, 255, 0.3);
+        opacity: 0.3;
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+        transform: translate(-50%, -50%);
+        animation: rotateCircle3 25s linear infinite reverse;
+    }
+
+    @keyframes rotateCircle2 {
+        0% { 
+            transform: translate(-50%, -50%) rotate(0deg); 
+        }
+        100% { 
+            transform: translate(-50%, -50%) rotate(360deg); 
+        }
+    }
+
+    @keyframes rotateCircle3 {
+        0% { 
+            transform: translate(-50%, -50%) rotate(0deg); 
+        }
+        100% { 
+            transform: translate(-50%, -50%) rotate(360deg); 
+        }
+    }
+
+    .photo-main {
+        width: 360px;
+        height: 360px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center;
+        border: 10px solid var(--photo-border);
+        box-shadow: 
+            0 25px 70px rgba(0, 0, 0, 0.3),
+            0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+            0 0 100px rgba(255, 255, 255, 0.1);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+    }
+
+    .photo-main:hover {
+        transform: translate(-50%, -50%) scale(1.02);
+        box-shadow: 
+            0 30px 80px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.3) inset,
+            0 0 120px rgba(255, 255, 255, 0.15);
+    }
+
+    /* Effet de brillance sur la photo */
+    .photo-main::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.2) 0%, 
+            transparent 50%, 
+            rgba(255, 255, 255, 0.1) 100%);
+        z-index: -1;
+        opacity: 0.6;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Container principal pour toutes les sections - Positionnement parfait */
+    .portfolio-sections-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        padding: 4rem 0;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        position: relative;
+    }
+
+    /* Sections améliorées avec animations et positionnement parfait */ 
+    .portfolio-section {
+        padding: 5rem 2rem;
+        background: var(--theme-section-bg);
+        border-radius: 30px;
+        box-shadow: 0 15px 50px var(--theme-shadow);
+        backdrop-filter: blur(10px);
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(50px);
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .portfolio-section.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .portfolio-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(30, 58, 138, 0.05) 0%, transparent 70%);
+        pointer-events: none;
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .section-title {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--theme-text-secondary);
+        text-align: center;
+        margin-bottom: 4rem;
+        position: relative;
+        padding-bottom: 1.5rem;
+        transition: color 0.3s ease;
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    .section-title.visible {
+        opacity: 1;
+        transform: translateY(0);
+        transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+    }
+    
+    [data-theme="dark"] .section-title::after {
+        background: linear-gradient(90deg, var(--gradient-purple-start) 0%, var(--gradient-purple-end) 100%);
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+    
+    /* Cartes améliorées */
+    .card {
+        background: var(--theme-card-bg);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    .card.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s;
+    }
+
+    .card:hover::before {
+        left: 100%;
+    }
+
+    .card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(30, 58, 138, 0.2);
+    }
+
+    /* Cartes Services avec icônes animées */
+    #services .card {
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+
+    #services .card i {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: inline-block;
+    }
+
+    #services .card:hover i {
+        transform: scale(1.2) rotate(5deg);
+        color: var(--primary-blue);
+    }
+
+    /* Cartes Skills améliorées */
+    #skills .card {
+        padding: 2rem;
+        border-left: 4px solid transparent;
+        transition: all 0.4s ease;
+    }
+
+    #skills .card:hover {
+        border-left-color: var(--primary-blue);
+        background: linear-gradient(135deg, var(--theme-card-bg) 0%, rgba(30, 58, 138, 0.05) 100%);
+    }
+
+    #skills .card h5 i {
+        transition: all 0.3s ease;
+    }
+
+    #skills .card:hover h5 i {
+        transform: scale(1.2);
+        color: var(--primary-blue);
+    }
+
+    /* Cartes Projets améliorées */
+    #work .card {
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    #work .card > div:first-child {
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #work .card:hover > div:first-child {
+        transform: scale(1.1);
+    }
+
+    #work .card:hover > div:first-child::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    #work .card .btn {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #work .card .btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    #work .card .btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    #work .card .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3);
+    }
+    
+    [data-theme="dark"] .card {
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="dark"] .card:hover {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+    
+    .text-muted {
+        color: var(--theme-text-muted) !important;
+        transition: color 0.3s ease;
+    }
+
+    /* Section About améliorée */
+    #about {
+        position: relative;
+    }
+
+    #about .lead {
+        font-size: 1.3rem;
+        line-height: 2;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease 0.3s;
+    }
+
+    #about .lead.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Styles pour alternance d'images/icônes dans les services */
+    .service-item {
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+        margin-bottom: 4rem;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.6s ease;
+    }
+
+    .service-item.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .service-item.reverse {
+        flex-direction: row-reverse;
+    }
+
+    .service-icon-wrapper {
+        flex: 0 0 300px;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(30, 58, 138, 0.2) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(30, 58, 138, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .service-icon-wrapper:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 50px rgba(30, 58, 138, 0.3);
+    }
+
+    .service-icon-wrapper::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: rotate 15s linear infinite;
+    }
+
+    .service-icon-wrapper i {
+        font-size: 5rem;
+        color: var(--primary-blue);
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s ease;
+    }
+
+    .service-icon-wrapper:hover i {
+        transform: scale(1.1) rotate(5deg);
+        color: var(--gradient-purple-start);
+    }
+
+    .service-content {
+        flex: 1;
+    }
+
+    .service-content h4 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--theme-text-secondary);
+        margin-bottom: 1.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .service-content p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--theme-text-muted);
+        transition: color 0.3s ease;
+    }
+
+    [data-theme="dark"] .service-icon-wrapper {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(30, 58, 138, 0.3) 100%);
+        box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+    }
+
+    [data-theme="dark"] .service-icon-wrapper:hover {
+        box-shadow: 0 15px 50px rgba(99, 102, 241, 0.4);
+    }
+
+    [data-theme="dark"] .service-icon-wrapper i {
+        color: var(--gradient-purple-start);
+    }
+
+    /* Footer */
+    .portfolio-footer {
+        background: var(--theme-nav-bg) !important;
+        backdrop-filter: blur(10px);
+        padding: 3rem 0 1.5rem !important;
+        margin-top: 4rem !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative !important;
+        overflow: hidden;
+        width: 100% !important;
+        max-width: 100% !important;
+        z-index: 1000 !important;
+        clear: both;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        box-sizing: border-box !important;
+    }
+
+    .portfolio-footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%);
+        z-index: 1;
+    }
+
+    .footer-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .footer-section {
+        margin-bottom: 2rem;
+    }
+
+    .footer-section h5 {
+        color: var(--text-white);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .footer-section p,
+    .footer-section a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-section a:hover {
+        color: var(--text-white);
+        transform: translateX(5px);
+    }
+
+    .footer-social {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .footer-social a {
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        background: transparent;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        color: var(--text-white);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .footer-social a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+        color: var(--text-white);
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 1.5rem;
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .footer-bottom p {
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-links a {
+        display: inline-block;
+    }
+
+    [data-theme="dark"] .portfolio-footer {
+        background: rgba(15, 23, 42, 0.98);
+        border-top-color: rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="dark"] .footer-social a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-text h1 {
+            font-size: 2.5rem;
+        }
+        .hero-text h1 .highlight {
+            font-size: 3rem;
+        }
+        .photo-container {
+            width: 420px;
+            height: 420px;
+        }
+        .photo-circle-1 {
+            width: 300px;
+            height: 300px;
+            border-width: 4px;
+        }
+        .photo-circle-2 {
+            width: 360px;
+            height: 360px;
+            border-width: 2px;
+        }
+        .photo-circle-3 {
+            width: 420px;
+            height: 420px;
+            border-width: 2px;
+        }
+        .photo-main {
+            width: 280px;
+            height: 280px;
+            border-width: 8px;
+        }
+        .hero-buttons {
+            flex-direction: column;
+        }
+        .btn-hero {
+            width: 100%;
+        }
+        .portfolio-sections-wrapper {
+            gap: 2.5rem;
+            padding: 1.5rem 0;
+        }
+        .portfolio-section {
+            padding: 3.5rem 0;
+            border-radius: 20px;
+        }
+        .service-item {
+            flex-direction: column !important;
+            gap: 2rem;
+            text-align: center;
+        }
+        .service-icon-wrapper {
+            flex: 0 0 250px;
+            width: 250px;
+            height: 250px;
+        }
+        .service-content h4 {
+            font-size: 1.5rem;
+        }
+        .service-content p {
+            font-size: 1rem;
+        }
+        .portfolio-footer {
+            padding: 2rem 0 1rem;
+        }
+        .footer-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .footer-social {
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block navbar %}
+<!-- Navigation moderne -->
+<nav class="navbar navbar-expand-lg portfolio-nav">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'portfolio' %}">
+            Ba Diarietou
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#home">{% trans "Accueil" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">{% trans "À propos" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">{% trans "Services" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#skills">{% trans "Compétences" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#work">{% trans "Projets" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">{% trans "Contact" %}</a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <!-- Sélecteur de langue -->
+                <form action="{% url 'set_language' %}" method="post" class="d-inline language-selector-form">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    <select name="language" onchange="this.form.submit()" class="language-selector">
+                        {% get_current_language as CURRENT_LANGUAGE %}
+                        <option value="fr" {% if CURRENT_LANGUAGE == 'fr' %}selected{% endif %}>🇫🇷 FR</option>
+                        <option value="en" {% if CURRENT_LANGUAGE == 'en' %}selected{% endif %}>🇬🇧 EN</option>
+                    </select>
+                </form>
+                <button class="theme-toggle" id="themeToggle" aria-label="{% trans 'Changer de thème' %}" title="{% trans 'Changer de thème' %}">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section id="home" class="portfolio-hero">
+    <div class="hero-background">
+        <div class="hero-shape hero-shape-1"></div>
+        <div class="hero-shape hero-shape-2"></div>
+        <div class="hero-shape hero-shape-3"></div>
+    </div>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content">
+                <div class="hero-text">
+                    <h1>
+                        {% trans "Salut ! Je suis" %}<br>
+                        <span class="highlight">{% trans "Développeuse Web" %}</span>
+                    </h1>
+                    <p>
+                        {% trans "Je suis une Développeuse Web / Backend avec une expérience approfondie. Mon expertise réside dans la création et le développement d'applications web fonctionnelles et bien structurées pour résoudre des besoins concrets." %}
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#about" class="btn btn-hero btn-learn-more">
+                            {% trans "En savoir plus" %}
+                        </a>
+                        <a href="#contact" class="btn btn-hero btn-hire-me">
+                            {% trans "Me contacter" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 hero-image-wrapper">
+                <div class="photo-container">
+                    <div class="photo-circle photo-circle-3"></div>
+                    <div class="photo-circle photo-circle-2"></div>
+                    <div class="photo-circle photo-circle-1"></div>
+                    <img src="{% static 'images/photo-profil.jpg' %}" alt="Ba Diarietou" class="photo-main" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="photo-main" style="background: linear-gradient(135deg, var(--portfolio-primary) 0%, var(--portfolio-primary-dark) 100%); display: none; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: 700; position: relative; z-index: 10; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+                        BD
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Wrapper pour toutes les sections avec espacement uniforme -->
+<div class="container">
+    <div class="portfolio-sections-wrapper">
+    <!-- About Section -->
+    <section id="about" class="portfolio-section">
+        <div class="container">
+        <h2 class="section-title">{% trans "À propos" %}</h2>
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-4 mb-md-0">
+                        <div class="text-center">
+                            <div style="width: 200px; height: 200px; margin: 0 auto; background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 60px rgba(30, 58, 138, 0.3);">
+                                <i class="fas fa-code fa-5x text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="lead" style="font-size: 1.25rem; line-height: 2; color: var(--theme-text-muted); text-align: left;">
+                            {% trans "Cette application d'annonces a été conçue pour permettre aux utilisateurs de publier et gérer facilement leurs annonces, tout en mettant en pratique mes compétences en développement web backend. L'objectif est de créer une plateforme intuitive où les utilisateurs peuvent créer, modifier et supprimer leurs annonces, avec un système de validation par les administrateurs pour garantir la qualité du contenu." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="portfolio-section">
+    <div class="container">
+        <h2 class="section-title">{% trans "Services" %}</h2>
+        
+        <div class="service-item">
+            <div class="service-icon-wrapper">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="service-content">
+                <h4>{% trans "Développement Web" %}</h4>
+                <p>{% trans "Création d'applications web modernes et performantes avec les dernières technologies. Je développe des solutions web sur mesure qui répondent à vos besoins spécifiques et offrent une expérience utilisateur optimale." %}</p>
+            </div>
+        </div>
+
+        <div class="service-item reverse">
+            <div class="service-icon-wrapper">
+                <i class="fas fa-server"></i>
+            </div>
+            <div class="service-content">
+                <h4>{% trans "Développement Backend" %}</h4>
+                <p>{% trans "Architecture backend robuste et scalable pour vos applications. Je conçois et développe des systèmes backend performants, sécurisés et maintenables qui garantissent la stabilité et la performance de vos projets." %}</p>
+            </div>
+        </div>
+
+        <div class="service-item">
+            <div class="service-icon-wrapper">
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="service-content">
+                <h4>{% trans "Gestion de Base de Données" %}</h4>
+                <p>{% trans "Conception et optimisation de bases de données pour garantir des performances optimales. Je crée des schémas de données efficaces et mets en place des stratégies d'optimisation pour améliorer les temps de réponse." %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section id="skills" class="portfolio-section">
+    <div class="container">
+        <h2 class="section-title">{% trans "Compétences" %}</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h5><i class="fas fa-check-circle text-primary"></i> {% trans "Conception CRUD" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Application CRUD complète avec gestion des opérations de base de données" %}</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h5><i class="fas fa-check-circle text-primary"></i> {% trans "Architecture Backend" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Organisation logique et structurée du backend" %}</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h5><i class="fas fa-check-circle text-primary"></i> {% trans "Sécurité" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Gestion des utilisateurs, permissions et validation" %}</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h5><i class="fas fa-check-circle text-primary"></i> {% trans "Structuration" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Structuration d'un projet de bout en bout" %}</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h5><i class="fas fa-check-circle text-primary"></i> {% trans "Internationalisation" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Support multilingue avec système de traduction" %}</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <h5><i class="fas fa-check-circle text-primary"></i> {% trans "Interface Responsive" %}</h5>
+                    <p class="text-muted mb-0">{% trans "Design adaptatif et moderne pour tous les appareils" %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Work Section -->
+<section id="work" class="portfolio-section">
+    <div class="container">
+        <h2 class="section-title">{% trans "Projets" %}</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm overflow-hidden h-100">
+                    <div style="height: 200px; background: linear-gradient(135deg, #1e3a8a 0%, #6366f1 100%); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-bullhorn fa-4x text-white"></i>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5>{% trans "Application d'Annonces" %}</h5>
+                        <p class="text-muted flex-grow-1">{% trans "Plateforme complète de gestion d'annonces avec système de validation" %}</p>
+                        <p class="text-muted small mb-2" style="font-style: italic;">{% trans "Cliquez ci-dessous pour accéder à l'application complète." %}</p>
+                        <a href="{% url 'liste_annonces' %}" class="btn btn-primary btn-sm mt-auto">
+                            <i class="fas fa-external-link-alt"></i> {% trans "Voir le projet" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm overflow-hidden h-100">
+                    <div style="height: 200px; background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-tasks fa-4x text-white"></i>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                    <h5>{% trans "App-To-Do" %}</h5>
+                    <p class="text-muted flex-grow-1">{% trans "Application de gestion de tâches moderne et intuitive développée avec React. Gestion complète des tâches (CRUD), filtres avancés et tableau de bord avec statistiques." %}</p>
+                        <div class="d-flex gap-2 mt-auto">
+                            <a href="https://to-do-app-iota-roan.vercel.app/" target="_blank" class="btn btn-primary btn-sm flex-grow-1">
+                                <i class="fas fa-external-link-alt"></i> {% trans "Voir l'application" %}
+                            </a>
+                            <a href="https://github.com/Dijajaja/App-To-Do" target="_blank" class="btn btn-outline-primary btn-sm flex-grow-1">
+                                <i class="fab fa-github"></i> {% trans "GitHub" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm overflow-hidden h-100">
+                    <div style="height: 200px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-calendar-alt fa-4x text-white"></i>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                    <h5>Maw3idi</h5>
+                    <p class="text-muted flex-grow-1">{% trans "Application de gestion de rendez-vous et planification développée avec Django. Système complet de prise de rendez-vous avec gestion des utilisateurs et des disponibilités." %}</p>
+                        <div class="d-flex gap-2 mt-auto">
+                            <a href="https://django-appointment-u96d.onrender.com" target="_blank" class="btn btn-primary btn-sm flex-grow-1">
+                                <i class="fas fa-external-link-alt"></i> {% trans "Voir l'application" %}
+                            </a>
+                            <a href="https://github.com/Dijajaja/maw3idi-appointments" target="_blank" class="btn btn-outline-primary btn-sm flex-grow-1">
+                                <i class="fab fa-github"></i> {% trans "GitHub" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="portfolio-section" style="background: linear-gradient(135deg, var(--primary-blue) 0%, var(--gradient-purple-start) 100%); color: var(--text-white);">
+    <div class="container">
+        <h2 class="section-title" style="color: var(--theme-text-primary);">{% trans "Contact" %}</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="d-flex justify-content-center gap-4 flex-wrap">
+                    <a href="mailto:kba161383@gmail.com" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-envelope"></i> {% trans "Email" %}
+                    </a>
+                    <a href="https://linkedin.com/in/ba-diarietou" target="_blank" class="btn btn-outline-light btn-lg">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                    <a href="https://github.com/ba-diarietou" target="_blank" class="btn btn-outline-light btn-lg">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+    </div>
+    </div>
+</div>
+<!-- Fin du wrapper des sections -->
+
+<!-- Bouton flottant -->
+<a href="{% url 'liste_annonces' %}" class="floating-btn">
+    <i class="fas fa-rocket"></i>
+    <span>{% trans "Entrer dans l'application" %}</span>
+</a>
+
+<!-- Footer Portfolio -->
+<footer class="portfolio-footer" style="background: var(--theme-nav-bg) !important; padding: 3rem 0 !important; margin-top: 4rem !important; display: block !important; visibility: visible !important; opacity: 1 !important; z-index: 1000 !important; width: 100% !important;">
+    <div class="container">
+        <div class="footer-content">
+            <div class="row">
+                <div class="col-md-4 footer-section">
+                    <h5>{% trans "Ba Diarietou" %}</h5>
+                    <p>{% trans "Développeuse Web / Backend passionnée par la création d'applications web modernes et performantes." %}</p>
+                    <div class="footer-social">
+                        <a href="mailto:kba161383@gmail.com" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                            <span>{% trans "Email" %}</span>
+                        </a>
+                        <a href="https://linkedin.com/in/ba-diarietou" target="_blank" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://github.com/ba-diarietou" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 footer-section">
+                    <h5>{% trans "Navigation" %}</h5>
+                    <ul class="footer-links">
+                        <li><a href="#home">{% trans "Accueil" %}</a></li>
+                        <li><a href="#about">{% trans "À propos" %}</a></li>
+                        <li><a href="#services">{% trans "Services" %}</a></li>
+                        <li><a href="#skills">{% trans "Compétences" %}</a></li>
+                        <li><a href="#work">{% trans "Projets" %}</a></li>
+                        <li><a href="#contact">{% trans "Contact" %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 footer-section">
+                    <h5>{% trans "Contact" %}</h5>
+                    <p>
+                        <i class="fas fa-envelope me-2"></i>
+                        <a href="mailto:kba161383@gmail.com">kba161383@gmail.com</a>
+                    </p>
+                    <p>
+                        <a href="{% url 'liste_annonces' %}" class="btn btn-outline-light btn-sm mt-2">
+                            <i class="fas fa-check-circle me-2"></i>{% trans "Open Ads Application" %}
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {% now "Y" %} Ba Diarietou. {% trans "Tous droits réservés." %}</p>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Gestion du thème clair/sombre pour le portfolio
+    // S'exécute immédiatement pour éviter les conflits avec base.html
+    (function() {
+        function initPortfolioTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const html = document.documentElement;
+            
+            if (!themeToggle || !themeIcon) {
+                return; // Les éléments n'existent pas
+            }
+            
+            // Récupérer le thème sauvegardé ou utiliser le thème système
+            function getInitialTheme() {
+                // Vérifier d'abord app-theme (utilisé par base.html), puis portfolio-theme (rétrocompatibilité)
+                const savedTheme = localStorage.getItem('app-theme') || localStorage.getItem('portfolio-theme');
+                if (savedTheme) {
+                    return savedTheme;
+                }
+                // Détecter la préférence système
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            
+            // Appliquer le thème
+            function setTheme(theme) {
+                if (theme === 'dark') {
+                    html.setAttribute('data-theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    localStorage.setItem('app-theme', 'dark');
+                    // Supprimer l'ancienne clé pour la rétrocompatibilité
+                    localStorage.removeItem('portfolio-theme');
+                } else {
+                    html.removeAttribute('data-theme');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    localStorage.setItem('app-theme', 'light');
+                    // Supprimer l'ancienne clé pour la rétrocompatibilité
+                    localStorage.removeItem('portfolio-theme');
+                }
+            }
+            
+            // Initialiser le thème
+            const currentDataTheme = html.getAttribute('data-theme');
+            const savedTheme = getInitialTheme();
+            
+            if (!currentDataTheme) {
+                // Aucun thème appliqué, initialiser avec le thème sauvegardé ou système
+                setTheme(savedTheme);
+            } else {
+                // Le thème est déjà appliqué, synchroniser l'icône et sauvegarder dans app-theme
+                if (currentDataTheme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    localStorage.setItem('app-theme', 'dark');
+                    localStorage.removeItem('portfolio-theme');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    localStorage.setItem('app-theme', 'light');
+                    localStorage.removeItem('portfolio-theme');
+                }
+            }
+            
+            // Toggle au clic
+            themeToggle.onclick = function() {
+                const currentTheme = html.getAttribute('data-theme');
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            };
+            
+            // Écouter les changements de préférence système (optionnel)
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                if (!localStorage.getItem('app-theme') && !localStorage.getItem('portfolio-theme')) {
+                    setTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+        
+        // Exécuter immédiatement si le DOM est prêt, sinon attendre
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPortfolioTheme);
+        } else {
+            // Le DOM est déjà chargé
+            initPortfolioTheme();
+        }
+    })();
+
+    // Animations au scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observer les sections
+        document.querySelectorAll('.portfolio-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Observer les titres de section
+        document.querySelectorAll('.section-title').forEach(title => {
+            observer.observe(title);
+        });
+
+        // Observer les cartes avec délais échelonnés
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+            observer.observe(card);
+        });
+
+        // Observer le texte de la section About
+        const aboutLead = document.querySelector('#about .lead');
+        if (aboutLead) {
+            observer.observe(aboutLead);
+        }
+
+        // Observer les services avec alternance d'images/icônes
+        document.querySelectorAll('.service-item').forEach((service, index) => {
+            service.style.transitionDelay = `${index * 0.2}s`;
+            observer.observe(service);
+        });
+
+        // Smooth scroll pour les ancres
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const offset = 80;
+                        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

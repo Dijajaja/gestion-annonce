@@ -1,0 +1,68 @@
+=== LISTE DES PAGES À CAPTURER ===
+
+BASE URL: http://127.0.0.1:8000
+
+PAGES PUBLIQUES:
+--------------------------------------------------
+Page Portfolio (Accueil)
+URL: http://127.0.0.1:8000/
+Nom: portfolio
+
+Liste des annonces publiques
+URL: http://127.0.0.1:8000/app/
+Nom: liste_annonces
+
+Détail de l'annonce: Assistance Numérique
+URL: http://127.0.0.1:8000/annonces/10/
+Nom: detail_annonce
+
+Page de connexion
+URL: http://127.0.0.1:8000/connexion/
+Nom: connexion
+
+Page d'inscription
+URL: http://127.0.0.1:8000/inscription/
+Nom: inscription
+
+
+PAGES ADMIN (necessitent connexion admin):
+--------------------------------------------------
+Tableau de bord admin
+URL: http://127.0.0.1:8000/admins/
+Nom: admin_dashboard
+
+Liste des catégories (admin)
+URL: http://127.0.0.1:8000/admins/categories/
+Nom: admin_categories
+
+Créer une annonce (admin)
+URL: http://127.0.0.1:8000/admins/creer/
+Nom: admin_creer_annonce
+
+Modifier annonce 10 (admin)
+URL: http://127.0.0.1:8000/admins/modifier/10/
+Nom: admin_modifier_annonce
+
+Modifier catégorie 20 (admin)
+URL: http://127.0.0.1:8000/admins/categories/modifier/20/
+Nom: admin_modifier_categorie
+
+Créer une catégorie (admin)
+URL: http://127.0.0.1:8000/admins/categories/creer/
+Nom: admin_creer_categorie
+
+
+PAGES UTILISATEUR (necessitent connexion client):
+--------------------------------------------------
+Mes annonces (utilisateur)
+URL: http://127.0.0.1:8000/mes-annonces/
+Nom: mes_annonces
+
+Créer une annonce (utilisateur)
+URL: http://127.0.0.1:8000/creer/
+Nom: creer_annonce
+
+Modifier annonce 10 (utilisateur)
+URL: http://127.0.0.1:8000/modifier/10/
+Nom: modifier_annonce
+

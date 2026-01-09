@@ -26,10 +26,11 @@ def connexion(request):
             utilisateur = authenticate(username=username, password=password)
             if utilisateur is not None:
                 login(request, utilisateur)
-                if request.user.role == 'admin':
+                # Rediriger les admins (par rôle ou superuser) vers le dashboard admin
+                if request.user.role == 'admin' or request.user.is_superuser:
                     return redirect('admin_dashboard') 
                 else:
-                    return redirect('liste_annonces')
+                    return redirect('liste_annonces_user')
             
     else:
         form = ConnexionForm()
@@ -37,4 +38,4 @@ def connexion(request):
 
 def deconnexion(request):
     logout(request)
-    return redirect('liste_annonces')
+    return redirect('portfolio')

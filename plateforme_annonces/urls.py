@@ -22,15 +22,28 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
+from django.views.i18n import set_language
+from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+# Personnalisation de l'interface admin
+admin.site.site_header = _("Administration AdPlus")
+admin.site.site_title = _("AdPlus Admin")
+admin.site.index_title = _("Panneau d'administration")
 
 urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('', include('annonces.urls')),
     path('', include('authentification.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Servir les fichiers statiques en développement
+if settings.DEBUG:
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    urlpatterns += staticfiles_urlpatterns()

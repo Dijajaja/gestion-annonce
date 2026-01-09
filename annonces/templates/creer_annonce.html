@@ -1,64 +1,488 @@
 {% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
 
-{% block title %}Créer une annonce{% endblock %}
+{% block title %}{% trans "Créer une annonce" %} - AdPlus{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Créer une annonce</h2>
+<style>
+    .create-annonce-page {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        padding: 1rem 0;
+    }
     
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} mb-3">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+    .create-annonce-page .container {
+        max-width: 900px;
+    }
     
-    <div class="card-body">
-        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-            {% csrf_token %}
+    .form-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+    }
+    
+    .form-header {
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    .form-header h2 {
+        color: #1e3a8a;
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.4rem;
+    }
+    
+    .form-header p {
+        margin: 0.25rem 0 0 0;
+        font-size: 0.9rem;
+    }
+    
+    .form-section {
+        margin-bottom: 1.25rem;
+    }
+    
+    .form-section-title {
+        color: #374151;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+    }
+    
+    .form-label i {
+        color: #1e3a8a;
+        font-size: 0.85rem;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        padding: 0.5rem 0.75rem;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #1e3a8a;
+        box-shadow: 0 0 0 0.2rem rgba(30, 58, 138, 0.25);
+        outline: none;
+    }
+    
+    .form-text {
+        font-size: 0.8rem;
+        color: #6b7280;
+        margin-top: 0.3rem;
+    }
+    
+    .btn-group-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e5e7eb;
+    }
+    
+    .btn-primary, .btn-secondary {
+        border-radius: 8px;
+        padding: 0.6rem 1.25rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+    }
+    
+    .invalid-feedback {
+        display: block;
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+    
+    .price-input-group {
+        display: flex;
+        align-items: center;
+    }
+    
+    .price-input-group .input-group-text {
+        border-left: none;
+        border-right: 1px solid #d1d5db;
+        background: #f9fafb;
+        color: #1e3a8a;
+        font-weight: 600;
+    }
+    
+    .file-input-wrapper {
+        position: relative;
+    }
+    
+    .custom-file-button {
+        margin-top: 0.5rem;
+    }
+    
+    .phone-input-wrapper {
+        position: relative;
+    }
+    
+    .phone-input-wrapper .iti {
+        width: 100%;
+    }
+    
+    .phone-input-wrapper .iti__flag-container {
+        z-index: 10;
+    }
+    
+    .phone-input-wrapper input {
+        padding-left: 52px !important;
+    }
+    
+    .file-name-display {
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.5s ease-out;
+    }
+</style>
+
+<div class="create-annonce-page">
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-3 fade-in" role="alert">
+                    {% if message.tags == 'success' %}
+                        <i class="fas fa-check-circle"></i>
+                    {% elif message.tags == 'error' or message.tags == 'danger' %}
+                        <i class="fas fa-exclamation-circle"></i>
+                    {% else %}
+                        <i class="fas fa-info-circle"></i>
+                    {% endif %}
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="form-card fade-in">
+            <div class="form-header">
+                <h2>
+                    <i class="fas fa-plus-circle"></i> {% trans "Créer une annonce" %}
+                </h2>
+                <p class="text-muted mb-0">{% trans "Publiez votre annonce sur AdPlus" %}</p>
+            </div>
             
-            <div class="mb-3">
-                <label for="{{ form.titre.id_for_label }}" class="form-label">Titre</label>
-                {{ form.titre }}
-                {% if form.titre.errors %}
-                    <div class="invalid-feedback">{{ form.titre.errors }}</div>
-                {% endif %}
-            </div>
+            <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <!-- Informations principales -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="fas fa-info-circle"></i> {% trans "Informations principales" %}
+                    </div>
+                    
+                    <div class="mb-2">
+                        <label for="{{ form.titre.id_for_label }}" class="form-label">
+                            <i class="fas fa-heading"></i> {% trans "Titre" %} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.titre }}
+                        {% if form.titre.errors %}
+                            <div class="invalid-feedback">{{ form.titre.errors }}</div>
+                        {% endif %}
+                    </div>
 
-            <div class="mb-3">
-                <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
-                {{ form.description }}
-                {% if form.description.errors %}
-                    <div class="invalid-feedback">{{ form.description.errors }}</div>
-                {% endif %}
-            </div>
+                    <div class="mb-2">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            <i class="fas fa-align-left"></i> {% trans "Description" %} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback">{{ form.description.errors }}</div>
+                        {% endif %}
+                    </div>
 
-            <div class="mb-3">
-                <label for="{{ form.prix.id_for_label }}" class="form-label">Prix (€)</label>
-                {{ form.prix }}
-                {% if form.prix.errors %}
-                    <div class="invalid-feedback">{{ form.prix.errors }}</div>
-                {% endif %}
-            </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label for="{{ form.prix.id_for_label }}" class="form-label">
+                                <i class="fas fa-money-bill-wave"></i> {% trans "Prix (MRU)" %}
+                            </label>
+                            <div class="price-input-group">
+                                {{ form.prix }}
+                                <span class="input-group-text">MRU</span>
+                            </div>
+                            <small class="form-text">{% trans "Laissez vide si l'annonce est gratuite" %}</small>
+                            {% if form.prix.errors %}
+                                <div class="invalid-feedback">{{ form.prix.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-2">
+                            <label for="{{ form.categorie.id_for_label }}" class="form-label">
+                                <i class="fas fa-folder"></i> {% trans "Catégorie" %} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.categorie }}
+                            {% if form.categorie.errors %}
+                                <div class="invalid-feedback">{{ form.categorie.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <label for="{{ form.statut_vente.id_for_label }}" class="form-label">
+                            <i class="fas fa-tag"></i> {% trans "Type d'annonce" %} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.statut_vente }}
+                        <small class="form-text">
+                            <i class="fas fa-info-circle"></i> {% trans "Sélectionnez le type d'annonce : Disponible, Service, Location ou Autre" %}
+                        </small>
+                        {% if form.statut_vente.errors %}
+                            <div class="invalid-feedback">{{ form.statut_vente.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Localisation -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="fas fa-map-marker-alt"></i> {% trans "Localisation" %}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label for="{{ form.ville.id_for_label }}" class="form-label">
+                                <i class="fas fa-city"></i> {% trans "Ville" %}
+                            </label>
+                            {{ form.ville }}
+                            {% if form.ville.errors %}
+                                <div class="invalid-feedback">{{ form.ville.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-2">
+                            <label for="{{ form.code_postal.id_for_label }}" class="form-label">
+                                <i class="fas fa-mail-bulk"></i> {% trans "Code postal" %}
+                            </label>
+                            {{ form.code_postal }}
+                            {% if form.code_postal.errors %}
+                                <div class="invalid-feedback">{{ form.code_postal.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image et Urgent -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="fas fa-image"></i> {% trans "Image" %}
+                    </div>
+                    
+                    <div class="mb-2">
+                        <label for="{{ form.image.id_for_label }}" class="form-label">
+                            <i class="fas fa-image"></i> {% trans "Image" %}
+                        </label>
+                        <div class="file-input-wrapper">
+                            {{ form.image }}
+                        </div>
+                        <small class="form-text">
+                            <i class="fas fa-info-circle"></i> {% trans "Optionnel : Chargez une image pour votre annonce." %}
+                        </small>
+                        {% if form.image.errors %}
+                            <div class="invalid-feedback">{{ form.image.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-2">
+                        <label class="form-label">
+                            <i class="fas fa-exclamation-triangle"></i> {% trans "Urgent" %}
+                        </label>
+                        <div class="form-check mt-2">
+                            {{ form.urgent }}
+                            <label class="form-check-label" for="{{ form.urgent.id_for_label }}">
+                                {% trans "Marquer cette annonce comme urgente" %}
+                            </label>
+                        </div>
+                        {% if form.urgent.errors %}
+                            <div class="invalid-feedback">{{ form.urgent.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Contact -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="fas fa-address-book"></i> {% trans "Contact" %}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label for="{{ form.telephone_contact.id_for_label }}" class="form-label">
+                                <i class="fas fa-phone"></i> {% trans "Téléphone de contact" %}
+                            </label>
+                            <div class="phone-input-wrapper">
+                                {{ form.telephone_contact }}
+                            </div>
+                            <small class="form-text">
+                                <i class="fas fa-info-circle"></i> {% trans "Optionnel" %}
+                            </small>
+                            {% if form.telephone_contact.errors %}
+                                <div class="invalid-feedback">{{ form.telephone_contact.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-2">
+                            <label for="{{ form.email_contact.id_for_label }}" class="form-label">
+                                <i class="fas fa-envelope"></i> {% trans "Email de contact" %}
+                            </label>
+                            {{ form.email_contact }}
+                            <small class="form-text">
+                                <i class="fas fa-info-circle"></i> {% trans "Optionnel" %}
+                            </small>
+                            {% if form.email_contact.errors %}
+                                <div class="invalid-feedback">{{ form.email_contact.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
 
-            <div class="mb-3">
-                <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
-                {{ form.image }}
-                <small class="form-text text-muted">Optionnel : Chargez une image pour votre annonce.</small>
-                {% if form.image.errors %}
-                    <div class="invalid-feedback">{{ form.image.errors }}</div>
-                {% endif %}
-            </div>
-
-            <div class="mb-3">
-                <label for="{{ form.categorie.id_for_label }}" class="form-label">Catégorie</label>
-                {{ form.categorie }}
-                {% if form.categorie.errors %}
-                    <div class="invalid-feedback">{{ form.categorie.errors }}</div>
-                {% endif %}
-            </div>
-
-            <button type="submit" class="btn btn-primary">Créer l'annonce</button>
-        </form>
+                <!-- Actions -->
+                <div class="btn-group-actions">
+                    <a href="{% url 'liste_annonces_user' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> {% trans "Annuler" %}
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> {% trans "Créer l'annonce" %}
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+<script>
+// Initialisation du sélecteur international de téléphone et traduction du bouton de sélection de fichier
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialiser le sélecteur international pour le téléphone
+    const phoneInput = document.querySelector('#{{ form.telephone_contact.id_for_label }}');
+    if (phoneInput) {
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "mr", // Mauritanie par défaut
+            preferredCountries: ["mr", "fr", "sn", "ml", "ne", "dz", "ma", "tn"],
+            separateDialCode: true,
+            placeholderNumberType: false,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+        });
+        
+        // Supprimer complètement le placeholder immédiatement
+        setTimeout(function() {
+            phoneInput.removeAttribute('placeholder');
+            phoneInput.placeholder = '';
+            // Forcer la suppression du placeholder généré par intl-tel-input
+            if (phoneInput.placeholder) {
+                phoneInput.placeholder = '';
+            }
+        }, 0);
+        
+        // S'assurer que le champ est vide au chargement
+        phoneInput.value = '';
+        
+        
+        phoneInput.addEventListener('countrychange', function() {
+            phoneInput.removeAttribute('placeholder');
+            phoneInput.placeholder = '';
+            if (!phoneInput.value) {
+                phoneInput.value = '';
+            }
+        });
+        
+        // Mettre à jour le champ avec le numéro complet incluant le code pays
+        phoneInput.addEventListener('blur', function() {
+            if (phoneInput.value && iti.isValidNumber()) {
+                phoneInput.value = iti.getNumber();
+            }
+        });
+        
+        // Supprimer le placeholder si il apparaît lors du focus
+        phoneInput.addEventListener('focus', function() {
+            phoneInput.removeAttribute('placeholder');
+            phoneInput.placeholder = '';
+        });
+    }
+    
+    // Traduction du bouton de sélection de fichier
+    const fileInputs = document.querySelectorAll('.file-input-wrapper input[type="file"]');
+    const currentLang = '{{ CURRENT_LANGUAGE|default:"fr" }}';
+    
+    // Traductions depuis Django
+    const chooseFileText = '{% trans "Choisir un fichier" %}';
+    const noFileText = '{% trans "Aucun fichier choisi" %}';
+    
+    fileInputs.forEach(function(input) {
+        // Créer un bouton personnalisé pour remplacer le bouton natif
+        const customButton = document.createElement('button');
+        customButton.type = 'button';
+        customButton.className = 'btn btn-outline-primary custom-file-button';
+        customButton.innerHTML = '<i class="fas fa-upload"></i> ' + chooseFileText;
+        
+        const fileNameDisplay = document.createElement('div');
+        fileNameDisplay.className = 'file-name-display text-muted';
+        fileNameDisplay.textContent = noFileText;
+        
+        customButton.onclick = function() {
+            input.click();
+        };
+        
+        input.addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : '';
+            if (fileName) {
+                fileNameDisplay.innerHTML = '<i class="fas fa-check text-success"></i> ' + fileName;
+                customButton.innerHTML = '<i class="fas fa-sync"></i> ' + chooseFileText;
+            } else {
+                fileNameDisplay.textContent = noFileText;
+                customButton.innerHTML = '<i class="fas fa-upload"></i> ' + chooseFileText;
+            }
+        });
+        
+        // Ajouter le bouton et l'affichage après l'input
+        input.parentNode.appendChild(customButton);
+        input.parentNode.appendChild(fileNameDisplay);
+        
+        // Masquer l'input natif mais le garder fonctionnel
+        input.style.position = 'absolute';
+        input.style.opacity = '0';
+        input.style.width = '1px';
+        input.style.height = '1px';
+        input.style.pointerEvents = 'none';
+    });
+});
+</script>
 {% endblock %}
