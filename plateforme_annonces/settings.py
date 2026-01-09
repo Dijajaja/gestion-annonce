@@ -92,36 +92,48 @@ WSGI_APPLICATION = 'plateforme_annonces.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # Configuration de la base de données
-# Utilise MySQL si les variables d'environnement sont définies, sinon SQLite
-DATABASE_NAME = os.getenv('DATABASE_NAME')
-DATABASE_USER = os.getenv('DATABASE_USER')
-DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
-DATABASE_HOST = os.getenv('DATABASE_HOST')
-DATABASE_PORT = os.getenv('DATABASE_PORT')
+# Priorité : DATABASE_URL (PostgreSQL pour Render/Heroku) > MySQL > SQLite
 
-if DATABASE_NAME and DATABASE_USER and DATABASE_PASSWORD:
-    # Configuration MySQL
+# Vérifier d'abord DATABASE_URL (utilisé par Render, Heroku, etc.)
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+if DATABASE_URL:
+    # Configuration PostgreSQL via DATABASE_URL (Render, Heroku)
+    import dj_database_url
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': DATABASE_NAME,
-            'USER': DATABASE_USER,
-            'PASSWORD': DATABASE_PASSWORD,
-            'HOST': DATABASE_HOST or 'localhost',
-            'PORT': DATABASE_PORT or '3306',
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            },
-        }
+        'default': dj_database_url.parse(DATABASE_URL)
     }
 else:
-    # Configuration SQLite par défaut
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+    # Configuration MySQL si les variables d'environnement sont définies
+    DATABASE_NAME = os.getenv('DATABASE_NAME')
+    DATABASE_USER = os.getenv('DATABASE_USER')
+    DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
+    DATABASE_HOST = os.getenv('DATABASE_HOST')
+    DATABASE_PORT = os.getenv('DATABASE_PORT')
+
+    if DATABASE_NAME and DATABASE_USER and DATABASE_PASSWORD:
+        # Configuration MySQL
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': DATABASE_NAME,
+                'USER': DATABASE_USER,
+                'PASSWORD': DATABASE_PASSWORD,
+                'HOST': DATABASE_HOST or 'localhost',
+                'PORT': DATABASE_PORT or '3306',
+                'OPTIONS': {
+                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                },
+            }
         }
-    }
+    else:
+        # Configuration SQLite par défaut (développement)
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
