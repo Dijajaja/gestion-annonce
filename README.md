@@ -1,81 +1,217 @@
-# Projet de Publication d'Annonces
+# AdPlus - Plateforme de Gestion d'Annonces
 
-Ce projet est une plateforme web permettant aux utilisateurs de publier et gérer des annonces. Il est développé avec Django pour le backend et Angular pour le frontend.
+AdPlus est une plateforme web moderne et multilingue permettant aux utilisateurs de publier et gérer des annonces. Développée avec Django, elle offre une interface intuitive avec authentification, administration complète et support multilingue (Français/Anglais).
 
-## Prérequis
+![Django](https://img.shields.io/badge/Django-5.1.6-092E20?style=flat&logo=django)
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat&logo=python)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat&logo=bootstrap)
 
-Avant d'exécuter ce projet, assurez-vous d'avoir installé :
-- [Python](https://www.python.org/downloads/) (>= 3.8)
-- [Node.js](https://nodejs.org/) et npm
-- [PostgreSQL](https://www.postgresql.org/) (ou une autre base de données compatible)
+## ✨ Fonctionnalités
 
-## Installation
+### Pour les Utilisateurs
+- 🔐 **Authentification sécurisée** : Inscription et connexion avec validation
+- 📝 **Gestion d'annonces** : Créer, modifier et supprimer ses annonces
+- 🖼️ **Upload d'images** : Ajouter des photos à vos annonces
+- 🔍 **Recherche avancée** : Filtrer par catégorie, prix, localisation
+- 🌍 **Multilingue** : Interface en Français et Anglais
+- 📱 **Responsive** : Compatible mobile, tablette et desktop
+- 🌙 **Thème sombre** : Toggle entre mode clair et sombre
 
-### 1. Cloner le projet
+### Pour les Administrateurs
+- 📊 **Dashboard complet** : Vue d'ensemble avec statistiques
+- ✅ **Validation d'annonces** : Approuver ou rejeter les annonces
+- 🏷️ **Gestion des catégories** : CRUD avec icônes Font Awesome
+- 👥 **Gestion des utilisateurs** : Contrôle total sur les comptes
+- 🔎 **Recherche et filtrage** : Outils de recherche avancés
+
+## 🚀 Installation Locale
+
+### Prérequis
+- Python 3.8 ou supérieur
+- pip (gestionnaire de paquets Python)
+- Git
+
+### Étapes d'installation
+
+1. **Cloner le dépôt**
 ```bash
-git clone https://github.com/Abeidak/Annonce.git
-cd Annonce
+git clone https://github.com/Dijajaja/gestion-annonce.git
+cd gestion-annonce
 ```
 
-### 2. Création de l'environnement virtuel
-
+2. **Créer un environnement virtuel**
 ```bash
-python -m venv env
-source venv/bin/activate  # Sur macOS/Linux
-venv\Scripts\activate  # Sur Windows
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# macOS/Linux
+source venv/bin/activate
 ```
 
-### 3. Installation des dépendances
-
+3. **Installer les dépendances**
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configuration de la base de données
+4. **Configurer les variables d'environnement**
 
-Modifiez le fichier `.env` en ajoutant vos informations de base de données :
+Créez un fichier `.env` à la racine du projet :
+```env
+DEBUG=True
+SECRET_KEY=votre_secret_key_ici
+ALLOWED_HOSTS=localhost,127.0.0.1
 
+# Optionnel : Configuration MySQL
+# DATABASE_NAME=votre_db
+# DATABASE_USER=votre_user
+# DATABASE_PASSWORD=votre_password
+# DATABASE_HOST=localhost
+# DATABASE_PORT=3306
 ```
-DATABASE_NAME=nom_de_votre_base
-DATABASE_USER=utilisateur
-DATABASE_PASSWORD=mot_de_passe
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
+
+Pour générer une SECRET_KEY sécurisée :
+```bash
+python manage.py shell
+>>> from django.core.management.utils import get_random_secret_key
+>>> print(get_random_secret_key())
 ```
 
-Appliquez ensuite les migrations :
-
+5. **Appliquer les migrations**
 ```bash
 python manage.py migrate
 ```
 
-### 5. Création d'un super-utilisateur (optionnel)
-
+6. **Créer un superutilisateur**
 ```bash
 python manage.py createsuperuser
 ```
 
-### 6. Lancer le serveur
+7. **Collecter les fichiers statiques**
+```bash
+python manage.py collectstatic --noinput
+```
 
+8. **Lancer le serveur de développement**
 ```bash
 python manage.py runserver
 ```
-Accédez au site via `http://127.0.0.1:8000/`
 
-<!-- ## Développement Frontend
-Si vous utilisez Angular pour le frontend, naviguez vers le dossier frontend et démarrez le projet :
+Accédez à l'application : http://127.0.0.1:8000/
 
+## 📦 Déploiement
+
+### Heroku
+
+1. Installer Heroku CLI
+2. Créer un compte Heroku
+3. Déployer :
 ```bash
-cd frontend
-npm install
-ng serve
+heroku create votre-app-name
+heroku config:set DEBUG=False
+heroku config:set SECRET_KEY=votre_secret_key
+heroku config:set ALLOWED_HOSTS=votre-app-name.herokuapp.com
+git push heroku main
+heroku run python manage.py migrate
+heroku run python manage.py createsuperuser
 ```
 
-## Déploiement
-Pour déployer le projet, vous pouvez utiliser Docker, Heroku ou un autre service cloud. Assurez-vous d'ajouter les configurations nécessaires pour le fichier `.env` et les paramètres de production.
+### Railway / Render
 
-## Contribution
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+Ces plateformes détectent automatiquement Django. Configurez simplement les variables d'environnement dans le dashboard :
+- `DEBUG=False`
+- `SECRET_KEY` (générez-en une nouvelle)
+- `ALLOWED_HOSTS=votre-domaine.com`
+- Optionnellement les variables MySQL si vous utilisez une base de données externe
 
-## Licence
-Ce projet est sous licence MIT. -->
+### Docker (à venir)
+
+Un Dockerfile sera ajouté prochainement pour faciliter le déploiement.
+
+## 📁 Structure du Projet
+
+```
+gestion-annonce/
+├── authentification/     # App d'authentification
+├── annonces/            # App principale des annonces
+├── plateforme_annonces/ # Configuration Django
+├── templates/           # Templates de base
+├── static/              # Fichiers statiques
+├── media/               # Images uploadées
+├── locale/              # Traductions (FR/EN)
+├── screenshots/         # Captures d'écran
+├── PRODUCTION.md        # Guide de production
+├── TRANSLATION.md       # Guide de traduction
+└── requirements.txt     # Dépendances Python
+```
+
+## 🌐 Internationalisation
+
+L'application supporte le Français (par défaut) et l'Anglais. 
+
+Pour ajouter une nouvelle langue :
+1. `python manage.py makemessages -l [code_langue]`
+2. Éditer les fichiers `.po` dans `locale/[code_langue]/LC_MESSAGES/`
+3. `python manage.py compilemessages`
+
+Voir [TRANSLATION.md](TRANSLATION.md) pour plus de détails.
+
+## 🔒 Sécurité
+
+En production, les paramètres suivants sont automatiquement activés :
+- ✅ SSL/HTTPS redirection
+- ✅ Cookies sécurisés
+- ✅ Protection XSS
+- ✅ HSTS (HTTP Strict Transport Security)
+- ✅ Protection CSRF
+
+Voir [PRODUCTION.md](PRODUCTION.md) pour la configuration complète.
+
+## 📝 Identifiants par défaut
+
+⚠️ **IMPORTANT** : Changez le mot de passe admin en production !
+
+```
+Username: admin
+Password: admin123
+```
+
+## 🛠️ Technologies Utilisées
+
+- **Backend** : Django 5.1.6
+- **Frontend** : Bootstrap 5, Font Awesome 6
+- **Base de données** : SQLite (développement) / MySQL (production)
+- **API** : Django REST Framework avec JWT
+- **Images** : Pillow
+- **i18n** : Django i18n
+
+## 📸 Captures d'écran
+
+Consultez le dossier `screenshots/` pour voir toutes les pages de l'application.
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! Pour contribuer :
+
+1. Fork le projet
+2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
+3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
+4. Push vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrez une Pull Request
+
+## 📄 Licence
+
+Ce projet est sous licence MIT.
+
+## 👥 Auteur
+
+Développé avec ❤️ pour la gestion d'annonces.
+
+## 📞 Support
+
+Pour toute question ou problème, ouvrez une [issue](https://github.com/Dijajaja/gestion-annonce/issues) sur GitHub.
+
+---
+
+**⭐ N'oubliez pas de mettre une étoile si ce projet vous a été utile !**
