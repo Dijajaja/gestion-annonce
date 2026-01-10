@@ -52,14 +52,17 @@ class Command(BaseCommand):
             return
 
         try:
-            User.objects.create_superuser(
+            user = User.objects.create_superuser(
                 username=username,
                 email=email,
                 password=password
             )
+            # Définir le rôle 'admin' pour le superutilisateur
+            user.role = 'admin'
+            user.save()
             self.stdout.write(
                 self.style.SUCCESS(
-                    f'✅ Superutilisateur "{username}" créé avec succès !'
+                    f'✅ Superutilisateur "{username}" créé avec succès avec le rôle admin !'
                 )
             )
         except Exception as e:
