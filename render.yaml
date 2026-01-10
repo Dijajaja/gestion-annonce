@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: adplus
+    name: adplus  # Changez ce nom pour personnaliser l'URL : votre-nom.onrender.com
     env: python
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: gunicorn plateforme_annonces.wsgi:application
+    startCommand: chmod +x start.sh && ./start.sh
     envVars:
       - key: PYTHON_VERSION
         value: 3.13.2
@@ -12,5 +12,5 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: ALLOWED_HOSTS
-        sync: false  # À configurer manuellement dans le dashboard
+        sync: false  # À configurer manuellement avec votre nom de service ou domaine personnalisé
 
