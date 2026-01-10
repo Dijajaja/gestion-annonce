@@ -34,6 +34,33 @@ DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 # Liste des hôtes autorisés pour la production
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else ['localhost', '127.0.0.1']
 
+# Nettoyer les chaînes vides de la liste
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS if host.strip()]
+
+# Si on est sur Render (détecté par DATABASE_URL contenant render.com ou RENDER=true)
+# Ajouter automatiquement les domaines Render
+if os.getenv('DATABASE_URL') and 'render.com' in os.getenv('DATABASE_URL', '') or os.getenv('RENDER'):
+    # Ajouter le domaine Render si disponible
+    render_service_name = os.getenv('RENDER_SERVICE_NAME', 'gestion-annonce')
+    render_external_url = os.getenv('RENDER_EXTERNAL_URL', '')
+    
+    if render_external_url:
+        # Extraire le domaine depuis l'URL complète
+        import re
+        domain_match = re.search(r'https?://([^/]+)', render_external_url)
+        if domain_match:
+            render_domain = domain_match.group(1)
+            if render_domain not in ALLOWED_HOSTS:
+                ALLOWED_HOSTS.append(render_domain)
+    
+    # Ajouter aussi le pattern générique pour Render (pour les sous-domaines)
+    if '*.onrender.com' not in ALLOWED_HOSTS:
+        # Pour Render, on ajoute tous les domaines .onrender.com
+        if render_service_name:
+            render_host = f'{render_service_name}.onrender.com'
+            if render_host not in ALLOWED_HOSTS:
+                ALLOWED_HOSTS.append(render_host)
+
 
 # Application definition
 
