@@ -8,7 +8,9 @@ echo "🚀 Démarrage de l'application AdPlus..."
 
 # Exécuter les migrations
 echo "📦 Application des migrations de la base de données..."
+
 # Essayer d'abord les migrations normales
+echo "🔄 Tentative 1: Migration standard..."
 MIGRATE_OUTPUT=$(python manage.py migrate --noinput 2>&1)
 MIGRATE_EXIT_CODE=$?
 
@@ -18,11 +20,11 @@ if [ $MIGRATE_EXIT_CODE -ne 0 ]; then
         echo "⚠️  Détection d'une incohérence dans l'historique des migrations..."
         echo "🔧 Correction de l'historique des migrations..."
         python manage.py fix_migrations --force || echo "⚠️  Échec de la correction"
-        echo "🔄 Nouvelle tentative d'application des migrations..."
-        python manage.py migrate --fake-initial --noinput || python manage.py migrate --noinput
+        echo "🔄 Tentative 2: Migration après correction..."
+        python manage.py migrate --fake-initial --noinput 2>&1 || python manage.py migrate --noinput 2>&1
     else
         echo "⚠️  Erreur détectée, utilisation de force_migrate..."
-        python manage.py force_migrate || python manage.py migrate --noinput
+        python manage.py force_migrate 2>&1 || python manage.py migrate --noinput 2>&1
     fi
 else
     echo "$MIGRATE_OUTPUT"
@@ -32,11 +34,23 @@ fi
 echo "🔍 Vérification des migrations restantes..."
 UNAPPLIED=$(python manage.py showmigrations --plan 2>/dev/null | grep '\[ \]' || true)
 if [ -n "$UNAPPLIED" ]; then
-    echo "⚠️  Certaines migrations ne sont pas appliquées, utilisation de force_migrate..."
-    python manage.py force_migrate || python manage.py migrate --noinput
+    echo "⚠️  Certaines migrations ne sont pas appliquées:"
+    echo "$UNAPPLIED"
+    echo "🔄 Tentative 3: Application forcée des migrations restantes..."
+    python manage.py force_migrate 2>&1 || python manage.py migrate --noinput 2>&1
 fi
 
-echo "✅ Migrations appliquées avec succès"
+# Vérification finale
+echo "🔍 Vérification finale..."
+FINAL_CHECK=$(python manage.py showmigrations --plan 2>/dev/null | grep '\[ \]' || true)
+if [ -n "$FINAL_CHECK" ]; then
+    echo "❌ ATTENTION: Il reste des migrations non appliquées:"
+    echo "$FINAL_CHECK"
+    echo "⚠️  Tentative ultime avec migrate --run-syncdb..."
+    python manage.py migrate --run-syncdb --noinput 2>&1 || true
+else
+    echo "✅ Toutes les migrations sont appliquées"
+fi
 
 # Réactiver errexit pour le reste du script
 set -o errexit
