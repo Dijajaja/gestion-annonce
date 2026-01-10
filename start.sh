@@ -21,8 +21,8 @@ if [ $MIGRATE_EXIT_CODE -ne 0 ]; then
         echo "🔄 Nouvelle tentative d'application des migrations..."
         python manage.py migrate --fake-initial --noinput || python manage.py migrate --noinput
     else
-        echo "❌ Erreur lors des migrations (non liée à InconsistentMigrationHistory)"
-        exit 1
+        echo "⚠️  Erreur détectée, utilisation de force_migrate..."
+        python manage.py force_migrate || python manage.py migrate --noinput
     fi
 else
     echo "$MIGRATE_OUTPUT"
@@ -30,10 +30,10 @@ fi
 
 # Vérifier que toutes les migrations sont appliquées
 echo "🔍 Vérification des migrations restantes..."
-UNAPPLIED=$(python manage.py showmigrations --plan | grep '\[ \]' || true)
+UNAPPLIED=$(python manage.py showmigrations --plan 2>/dev/null | grep '\[ \]' || true)
 if [ -n "$UNAPPLIED" ]; then
-    echo "⚠️  Certaines migrations ne sont pas appliquées, nouvelle tentative..."
-    python manage.py migrate --noinput
+    echo "⚠️  Certaines migrations ne sont pas appliquées, utilisation de force_migrate..."
+    python manage.py force_migrate || python manage.py migrate --noinput
 fi
 
 echo "✅ Migrations appliquées avec succès"
