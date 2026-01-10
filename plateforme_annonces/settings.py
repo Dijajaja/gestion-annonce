@@ -182,7 +182,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # Pour collectstatic en production
 
 # Configuration WhiteNoise pour servir les fichiers statiques
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Utiliser CompressedStaticFilesStorage au lieu de CompressedManifestStaticFilesStorage
+# pour éviter les problèmes de connexion DB pendant collectstatic
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Dossiers supplémentaires pour les fichiers statiques
 STATICFILES_DIRS = [

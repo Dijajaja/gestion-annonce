@@ -96,16 +96,29 @@ Si vous souhaitez utiliser PostgreSQL sur Render :
 
 ### Étape 6 : Configurer la Base de Données
 
+⚠️ **IMPORTANT : Limitation du plan gratuit Render**
+- Le plan gratuit permet **une seule base de données PostgreSQL gratuite**
+- Si vous avez déjà une base, réutilisez-la ou supprimez l'ancienne
+- Vous pouvez aussi utiliser SQLite pour les tests (mais données perdues lors des redéploiements)
+
 #### Option A : Utiliser PostgreSQL sur Render (Recommandé)
 
-1. **Créer la base PostgreSQL** (si pas déjà fait) :
+1. **Créer la base PostgreSQL** (si pas déjà fait ET si vous n'avez pas d'autre base gratuite) :
    - **New +** → **PostgreSQL**
    - Plan gratuit disponible : `Free`
+   - ⚠️ **Si erreur "cannot have more than one active free tier database"** :
+     - Vous avez déjà une base PostgreSQL gratuite
+     - Soit supprimez l'ancienne (Settings → Delete Database)
+     - Soit réutilisez l'existante (voir ci-dessous)
 
 2. **Lier la base à votre service** :
-   - Dans les paramètres de votre Web Service
-   - Section **"Environment"** → **"Add Environment Variable"**
-   - Render devrait automatiquement détecter la base et ajouter `DATABASE_URL`
+   - **Si vous créez une nouvelle base** : Render la détectera automatiquement et ajoutera `DATABASE_URL`
+   - **Si vous réutilisez une base existante** :
+     1. Allez dans votre base PostgreSQL existante sur Render
+     2. Copiez l'**"Internal Database URL"** ou **"External Database URL"**
+     3. Dans votre Web Service → **Environment Variables**
+     4. Ajoutez : Key = `DATABASE_URL`, Value = l'URL copiée
+     5. Cliquez sur "Save Changes"
 
 3. **Modifier settings.py pour utiliser DATABASE_URL** :
 
