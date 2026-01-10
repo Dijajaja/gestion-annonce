@@ -28,6 +28,14 @@ else
     echo "$MIGRATE_OUTPUT"
 fi
 
+# Vérifier que toutes les migrations sont appliquées
+echo "🔍 Vérification des migrations restantes..."
+UNAPPLIED=$(python manage.py showmigrations --plan | grep '\[ \]' || true)
+if [ -n "$UNAPPLIED" ]; then
+    echo "⚠️  Certaines migrations ne sont pas appliquées, nouvelle tentative..."
+    python manage.py migrate --noinput
+fi
+
 echo "✅ Migrations appliquées avec succès"
 
 # Réactiver errexit pour le reste du script
