@@ -8,5 +8,5 @@ class Utilisateur(AbstractUser):
         ('admin','Admin'),
         ('client','Client'),
     ]
-    telephone = models.IntegerField(blank=True,null=True)
+    telephone = models.CharField(max_length=20, blank=True, null=True, help_text="Format : +222 12 34 56 78")
     role = models.CharField(choices=ROLE_CHOIX, default='client', max_length=10)
