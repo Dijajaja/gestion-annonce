@@ -38,18 +38,23 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # Apps Django de base
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # App d'authentification personnalisée (DOIT être avant admin)
+    'authentification',
+    # Admin (dépend de authentification)
+    'django.contrib.admin',
+    # Apps tierces
     'rest_framework_simplejwt',
     'rest_framework',
     'corsheaders',
-    'annonces',
     'django_bootstrap5',
-    'authentification',
+    # Apps du projet
+    'annonces',
 ]
 
 MIDDLEWARE = [

@@ -8,7 +8,15 @@ echo "🚀 Démarrage de l'application AdPlus..."
 
 # Exécuter les migrations
 echo "📦 Application des migrations de la base de données..."
-python manage.py migrate --noinput
+# Essayer d'abord les migrations normales
+if python manage.py migrate --noinput 2>&1 | grep -q "InconsistentMigrationHistory"; then
+    echo "⚠️  Détection d'une incohérence dans l'historique des migrations..."
+    echo "🔧 Correction de l'historique des migrations..."
+    python manage.py fix_migrations --force || echo "⚠️  Échec de la correction, tentative avec --fake-initial..."
+    python manage.py migrate --fake-initial --noinput || python manage.py migrate --noinput
+else
+    python manage.py migrate --noinput
+fi
 
 echo "✅ Migrations appliquées avec succès"
 
