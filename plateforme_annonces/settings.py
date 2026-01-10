@@ -37,13 +37,14 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_
 # Nettoyer les chaînes vides de la liste
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS if host.strip()]
 
-# Si on est sur Render (détecté par DATABASE_URL contenant render.com ou RENDER=true)
+# Si on est sur Render (détecté par DATABASE_URL contenant render.com ou RENDER_EXTERNAL_URL)
 # Ajouter automatiquement les domaines Render
-if os.getenv('DATABASE_URL') and 'render.com' in os.getenv('DATABASE_URL', '') or os.getenv('RENDER'):
-    # Ajouter le domaine Render si disponible
-    render_service_name = os.getenv('RENDER_SERVICE_NAME', 'gestion-annonce')
-    render_external_url = os.getenv('RENDER_EXTERNAL_URL', '')
-    
+render_external_url = os.getenv('RENDER_EXTERNAL_URL', '')
+database_url = os.getenv('DATABASE_URL', '')
+is_on_render = (database_url and 'render.com' in database_url) or render_external_url or os.getenv('RENDER')
+
+if is_on_render:
+    # Ajouter le domaine Render si disponible via RENDER_EXTERNAL_URL
     if render_external_url:
         # Extraire le domaine depuis l'URL complète
         import re
@@ -53,13 +54,18 @@ if os.getenv('DATABASE_URL') and 'render.com' in os.getenv('DATABASE_URL', '') o
             if render_domain not in ALLOWED_HOSTS:
                 ALLOWED_HOSTS.append(render_domain)
     
-    # Ajouter aussi le pattern générique pour Render (pour les sous-domaines)
-    if '*.onrender.com' not in ALLOWED_HOSTS:
-        # Pour Render, on ajoute tous les domaines .onrender.com
-        if render_service_name:
-            render_host = f'{render_service_name}.onrender.com'
-            if render_host not in ALLOWED_HOSTS:
-                ALLOWED_HOSTS.append(render_host)
+    # Ajouter aussi le nom de service Render si disponible
+    render_service_name = os.getenv('RENDER_SERVICE_NAME', '')
+    if render_service_name and f'{render_service_name}.onrender.com' not in ALLOWED_HOSTS:
+        render_host = f'{render_service_name}.onrender.com'
+        ALLOWED_HOSTS.append(render_host)
+    
+    # En dernier recours, si on détecte Render mais pas de domaine spécifique, 
+    # on ajoute gestion-annonce.onrender.com par défaut
+    if not any('.onrender.com' in host for host in ALLOWED_HOSTS):
+        default_render_host = 'gestion-annonce.onrender.com'
+        if default_render_host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(default_render_host)
 
 
 # Application definition
