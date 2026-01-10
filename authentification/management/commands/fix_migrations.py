@@ -34,10 +34,11 @@ class Command(BaseCommand):
             return
 
         with connection.cursor() as cursor:
-            # Supprimer les migrations de admin qui sont en conflit
-            self.stdout.write('🗑️  Suppression des migrations admin problématiques...')
+            # Supprimer TOUTES les migrations de admin qui sont en conflit
+            # (pas seulement 0001_initial, mais aussi 0002, etc.)
+            self.stdout.write('🗑️  Suppression de toutes les migrations admin problématiques...')
             cursor.execute(
-                "DELETE FROM django_migrations WHERE app = 'admin' AND name = '0001_initial'"
+                "DELETE FROM django_migrations WHERE app = 'admin'"
             )
             deleted_admin = cursor.rowcount
             
@@ -48,6 +49,13 @@ class Command(BaseCommand):
             )
             deleted_auth = cursor.rowcount
             
+            # Supprimer aussi les migrations d'annonces si nécessaire
+            self.stdout.write('🗑️  Vérification des migrations annonces...')
+            cursor.execute(
+                "DELETE FROM django_migrations WHERE app = 'annonces'"
+            )
+            deleted_annonces = cursor.rowcount
+            
             self.stdout.write(self.style.SUCCESS(
                 f'✅ {deleted_admin} migration(s) admin supprimée(s)'
             ))
@@ -55,6 +63,9 @@ class Command(BaseCommand):
                 f'✅ {deleted_auth} migration(s) authentification supprimée(s)'
             ))
             self.stdout.write(self.style.SUCCESS(
-                '✅ Vous pouvez maintenant exécuter "python manage.py migrate"'
+                f'✅ {deleted_annonces} migration(s) annonces supprimée(s)'
+            ))
+            self.stdout.write(self.style.SUCCESS(
+                '✅ Historique nettoyé. Vous pouvez maintenant exécuter "python manage.py migrate"'
             ))
 
