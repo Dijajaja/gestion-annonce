@@ -78,22 +78,22 @@ python manage.py shell
 >>> print(get_random_secret_key())
 ```
 
-5. **Appliquer les migrations**
+5. *Appliquer les migrations*
 ```bash
 python manage.py migrate
 ```
 
-6. **Créer un superutilisateur**
+6. *Créer un superutilisateur*
 ```bash
 python manage.py createsuperuser
 ```
 
-7. **Collecter les fichiers statiques**
+7. *Collecter les fichiers statiques*
 ```bash
 python manage.py collectstatic --noinput
 ```
 
-8. **Lancer le serveur de développement**
+8. *Lancer le serveur de développement*
 ```bash
 python manage.py runserver
 ```
@@ -125,9 +125,7 @@ Ces plateformes détectent automatiquement Django. Configurez simplement les var
 - `ALLOWED_HOSTS=votre-domaine.com`
 - Optionnellement les variables MySQL si vous utilisez une base de données externe
 
-### Docker (à venir)
 
-Un Dockerfile sera ajouté prochainement pour faciliter le déploiement.
 
 ## 📁 Structure du Projet
 
@@ -168,14 +166,6 @@ En production, les paramètres suivants sont automatiquement activés :
 
 Voir [PRODUCTION.md](PRODUCTION.md) pour la configuration complète.
 
-## 📝 Identifiants par défaut
-
-⚠️ **IMPORTANT** : Changez le mot de passe admin en production !
-
-```
-Username: admin
-Password: admin123
-```
 
 ## 🛠️ Technologies Utilisées
 
@@ -186,19 +176,6 @@ Password: admin123
 - **Images** : Pillow
 - **i18n** : Django i18n
 
-## 📸 Captures d'écran
-
-Consultez le dossier `screenshots/` pour voir toutes les pages de l'application.
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! Pour contribuer :
-
-1. Fork le projet
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
 
 ## 📄 Licence
 
