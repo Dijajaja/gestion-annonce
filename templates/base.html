@@ -611,18 +611,44 @@
             }
         })();
 
-        // Masquer le loader une fois la page chargée
-        window.addEventListener('load', function() {
+        // Le loader ne doit s'afficher que lors du premier chargement (réveil Render)
+        // Pas lors des navigations internes (clics sur les liens)
+        (function() {
             const loader = document.getElementById('pageLoader');
-            if (loader) {
+            if (!loader) return;
+
+            // Vérifier si c'est une navigation interne (back/forward ou lien cliqué)
+            // En utilisant performance.navigation ou performance.getEntriesByType
+            const isNavigation = performance.getEntriesByType('navigation')[0];
+            const navType = isNavigation ? isNavigation.type : '';
+            
+            // Si c'est une navigation interne (back_forward, link, etc.), cacher immédiatement
+            if (navType === 'back_forward' || navType === 'link' || navType === 'prerender') {
+                loader.style.display = 'none';
+                return;
+            }
+
+            // Vérifier si l'utilisateur a déjà visité le site dans cette session
+            const sessionVisited = sessionStorage.getItem('siteVisited');
+            if (sessionVisited === 'true') {
+                // Pas la première visite dans cette session, cacher immédiatement
+                loader.style.display = 'none';
+                return;
+            }
+
+            // Première visite ou rechargement complet - marquer comme visité
+            sessionStorage.setItem('siteVisited', 'true');
+
+            // Masquer le loader une fois la page chargée
+            window.addEventListener('load', function() {
                 setTimeout(function() {
                     loader.classList.add('hidden');
                     setTimeout(function() {
                         loader.style.display = 'none';
                     }, 300);
                 }, 100);
-            }
-        });
+            });
+        })();
     </script>
 </body>
 </html>
