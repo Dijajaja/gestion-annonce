@@ -32,10 +32,17 @@ admin.site.site_title = _("AdPlus Admin")
 admin.site.index_title = _("Panneau d'administration")
 
 urlpatterns = [
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
+    # API REST
+    path('api/', include('annonces.api_urls')),
+    
+    # JWT Authentication
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+    # Admin Django (gardé pour l'administration backend)
     path('admin/', admin.site.urls),
+    
+    # URLs existantes (templates Django - gardées pour compatibilité)
     path('i18n/', include('django.conf.urls.i18n')),
     path('', include('annonces.urls')),
     path('', include('authentification.urls')),

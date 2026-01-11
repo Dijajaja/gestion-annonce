@@ -237,12 +237,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-
     ),
-'DEFAULT_PERRMISSION_CLASSES': (
-        'rest_framework_simplejwt.permissions.ItAuthenticated',
-
-    )
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',  # Par défaut, permettre à tous (géré dans les ViewSets)
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
 }
 from datetime import timedelta
 SIMPLE_JWT = {
@@ -274,10 +274,37 @@ else:
     SESSION_COOKIE_SECURE = False
 
 # Configuration CORS pour la production
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',') if os.getenv('CORS_ALLOWED_ORIGINS') else []
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS_STR = os.getenv('CORS_ALLOWED_ORIGINS', '')
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in CORS_ALLOWED_ORIGINS_STR.split(',') if origin.strip()] if CORS_ALLOWED_ORIGINS_STR else []
 
-# En développement, permettre toutes les origines pour faciliter les tests
+# En développement, ajouter localhost par défaut
+if DEBUG and not CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS.extend([
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://localhost:5173',  # Vite dev server
+    ])
+
+# Pour Vercel, on autorisera toutes les origines .vercel.app en développement
+# En production, il faut lister les URLs exactes dans CORS_ALLOWED_ORIGINS
 if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = False  # Ne pas permettre toutes les origines pour la sécurité
-    CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
+    CORS_ALLOW_ALL_ORIGINS = False  # Toujours spécifier les origines pour la sécurité
+    # En développement, on peut utiliser cette option temporairement :
+    # CORS_ALLOW_ALL_ORIGINS = True  # Décommenter seulement en dev local
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# En développement, CSRF trusted origins
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000', 'http://localhost:3000']
