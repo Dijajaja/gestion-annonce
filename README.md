@@ -9,20 +9,20 @@ AdPlus est une plateforme web moderne et multilingue permettant aux utilisateurs
 ## ✨ Fonctionnalités
 
 ### Pour les Utilisateurs
-- 🔐 **Authentification sécurisée** : Inscription et connexion avec validation
-- 📝 **Gestion d'annonces** : Créer, modifier et supprimer ses annonces
-- 🖼️ **Upload d'images** : Ajouter des photos à vos annonces
-- 🔍 **Recherche avancée** : Filtrer par catégorie, prix, localisation
-- 🌍 **Multilingue** : Interface en Français et Anglais
-- 📱 **Responsive** : Compatible mobile, tablette et desktop
-- 🌙 **Thème sombre** : Toggle entre mode clair et sombre
+- Authentification sécurisée : Inscription et connexion avec validation
+- Gestion d'annonces : Créer, modifier et supprimer ses annonces
+- Upload d'images : Ajouter des photos à vos annonces
+- Recherche avancée : Filtrer par catégorie, prix, localisation
+- Multilingue : Interface en Français et Anglais
+- Responsive : Compatible mobile, tablette et desktop
+- Thème sombre : Toggle entre mode clair et sombre
 
 ### Pour les Administrateurs
-- 📊 **Dashboard complet** : Vue d'ensemble avec statistiques
-- ✅ **Validation d'annonces** : Approuver ou rejeter les annonces
-- 🏷️ **Gestion des catégories** : CRUD avec icônes Font Awesome
-- 👥 **Gestion des utilisateurs** : Contrôle total sur les comptes
-- 🔎 **Recherche et filtrage** : Outils de recherche avancés
+- 📊 Dashboard complet : Vue d'ensemble avec statistiques
+- Validation d'annonces : Approuver ou rejeter les annonces
+- Gestion des catégories: CRUD avec icônes Font Awesome
+- Gestion des utilisateurs : Contrôle total sur les comptes
+- Recherche et filtrage : Outils de recherche avancés
 
 ## 🚀 Installation Locale
 
